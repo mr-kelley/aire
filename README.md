@@ -60,7 +60,7 @@ Aire includes a **Context Envelope** spec that is AI2AI-compatible. It’s **opt
 **Using Aire without AI2AI (compatibility):**  
 Issue a **Minimal Human Directive** with the same fields (OBJECTIVE / REQUIRES / DELIVERABLES / VERIFICATION). Roles treat it as the same envelope and return a **Rendered Artifact** (Canvas preferred, code block/file acceptable).
 
-See [AI2AI Spec](./docs/ai2ai_spec.md) for details.
+See [AI2AI Spec](./templates/ai2ai-directive-spec.md) for details.
 
 ---
 
@@ -80,7 +80,7 @@ For a step‑by‑step beginner’s guide, see [HOWTO.md](./HOWTO.md).
 
 Aire is new, and stewardship matters. For now, contributions are welcome through **issues** and **discussions**. Pull requests will be accepted selectively until the v0.2 cycle. See `CONTRIBUTING.md` for details.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 ---
 
