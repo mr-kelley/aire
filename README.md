@@ -60,7 +60,7 @@ Aire includes a **Context Envelope** spec that is AI2AI-compatible. It’s **opt
 **Using Aire without AI2AI (compatibility):**  
 Issue a **Minimal Human Directive** with the same fields (OBJECTIVE / REQUIRES / DELIVERABLES / VERIFICATION). Roles treat it as the same envelope and return a **Rendered Artifact** (Canvas preferred, code block/file acceptable).
 
-**Spec link:** See [`templates/ai2ai-directive-spec.md`](./templates/ai2ai-directive-spec.md) for canonical fields.
+See [AI2AI Spec](./docs/ai2ai_spec.md) for details.
 
 ---
 
@@ -72,11 +72,15 @@ Copy `templates/role.base.md` into a new directory under `roles/`.
 
 Fill out the template. Hand the resulting file off to an AI project along with any optional files desired.
 
+For a step‑by‑step beginner’s guide, see [HOWTO.md](./HOWTO.md).
+
 ---
 
 ## Contributing
 
 Aire is new, and stewardship matters. For now, contributions are welcome through **issues** and **discussions**. Pull requests will be accepted selectively until the v0.2 cycle. See `CONTRIBUTING.md` for details.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
