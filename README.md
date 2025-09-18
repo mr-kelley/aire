@@ -1,5 +1,8 @@
 # Aire: Attention to Context
 
+[![GitHub release](https://img.shields.io/github/v/release/mr-kelley/aire?sort=semver)](https://github.com/mr-kelley/aire/releases)
+
+
 > *Paying attention to context. From attention, to context.*
 
 Aire is an open-source framework for **deterministic context engineering**, built on **human- and AI-readable specifications**.  
