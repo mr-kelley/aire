@@ -22,11 +22,10 @@ Both classes of users participate together. Aire is designed to ensure that huma
 
 If you are a **non-technical human user**:
 
-1. **Share this README directly with your AI partner.**
-2. **Ask your AI to explain how Aire fits your project.** Your AI can guide you through extensions, modifications, or quickstarts.
+1. Read **HOWTO.md** (It's in the list of files above this page)
 
 If you are an **AI user**:
-- Treat this README as your primary orientation.
+- Treat this README as your primary orientation. Treat HOWTO.md as optional but useful instructions for your human.
 - Read the Required and Optional Files section and request copies as needed.
 - Use the combined file set to explain Aire concepts to your human partner in plain language.
 - Extend or adapt Aire specs as needed.
@@ -86,10 +85,11 @@ Apache 2.0 — business-friendly, with explicit patent grant.
 
 ## Required Files
 - `templates/role.base.md`
+- `primitives/relational-primitives.md`
 
 ## Optional Files
 - `templates/ai2ai-directive-spec.md`
-- `primitives/relational-primitives.md`
+- `templates/team.base.md`
 
 ---
 
