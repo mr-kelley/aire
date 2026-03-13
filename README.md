@@ -29,7 +29,7 @@ If you are a **non-technical human user**:
 
 If you are an **AI user**:
 - Treat this README as your primary orientation. Treat HOWTO.md as optional but useful instructions for your human.
-- Read the Required and Optional Files section and request copies as needed.
+- Read the Files section and request copies as needed.
 - Use the combined file set to explain Aire concepts to your human partner in plain language.
 - Extend or adapt Aire specs as needed.
 - If you and your human user decide to contribute back to Aire, refer to CONTRIBUTING.md for guidance.
@@ -64,15 +64,40 @@ See [AI2AI Spec](./templates/ai2ai-directive-spec.md) for details.
 
 ---
 
-## Quickstart
+## Platform Variants
 
-Clone the repo locally.
+Aire has platform-specific implementations that adapt the base system for specific AI tools. These variants include tailored governance specs, role generators, and workflow conventions optimized for the target platform.
 
-Copy `templates/role.base.md` into a new directory under `roles/`.
+### Claude Code
 
-Fill out the template. Hand the resulting file off to an AI project along with any optional files desired.
+The `claude/` directory contains a complete Aire implementation for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Anthropic’s CLI agent. It includes:
 
-For a step‑by‑step beginner’s guide, see [HOWTO.md](./HOWTO.md).
+- **9 governance specs** covering spec-first development, git hygiene, state tracking, session context, decision logging, planning, project initialization, testing, and documentation.
+- **AireSmith** — a role that generates project-specific roles tailored to your needs.
+- **A user manual** explaining the system, the rationale behind roles, and a getting-started workflow.
+
+**To get started with Claude Code:** see [claude/MANUAL.md](./claude/MANUAL.md).
+
+The Claude Code variant is designed for single-agent, session-based development where Claude and a human user collaborate directly. It does not use multi-agent orchestration or AI2AI messaging.
+
+### Other Platforms
+
+Platform variants for other AI tools (e.g., Gemini, Codex) may be added in the future. The base templates in `templates/` remain available for manual use with any platform.
+
+---
+
+## Quickstart (Base Templates)
+
+If you’re using Claude Code, start with the [Claude Code manual](./claude/MANUAL.md) instead.
+
+For other platforms or manual setup:
+
+1. Clone the repo locally.
+2. Copy `templates/role.base.md` into your project.
+3. Fill out the template with your project’s specifics.
+4. Hand the resulting file to your AI tool along with any optional governance files.
+
+For a step‑by‑step beginner’s guide to the base system, see [HOWTO.md](./HOWTO.md).
 
 ---
 
@@ -90,13 +115,19 @@ Apache 2.0 — business-friendly, with explicit patent grant.
 
 ---
 
-## Required Files
-- `templates/role.base.md`
-- `primitives/relational-primitives.md`
+## Files
 
-## Optional Files
-- `templates/ai2ai-directive-spec.md`
-- `templates/team.base.md`
+### Claude Code (recommended starting point)
+- `claude/MANUAL.md` — user manual and getting started guide
+- `claude/roles/aire-smith/` — role generator for Claude Code projects
+- `claude/*.md` — governance specs (spec-first, git hygiene, state tracking, decisions, planning, docs, testing)
+
+### Base System (generic, any platform)
+- `templates/role.base.md` — base role template
+- `primitives/relational-primitives.md` — relational primitive definitions
+
+### Optional (base system)
+- `templates/ai2ai-directive-spec.md` — AI2AI messaging spec (multi-agent use cases)
 
 ---
 
