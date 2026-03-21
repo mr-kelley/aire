@@ -1,0 +1,73 @@
+teams
+
+
+*.password
+.gitattributes
+.github/
+# .gitignore — this file is tracked
+
+# ---- OS / Editor junk ----
+software-architect.md
+.DS_Store
+.idea/.vscode/
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+.env
+.env.*
+*.pyc
+
+# ---- Node / JS tooling (if used by packages/*) ----
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn/cache/
+.yarn/install-state.gz
+# keep lockfiles committed
+
+# ---- Build / Dist / Coverage ----
+build/
+dist/
+coverage/
+htmlcov/
+.venv/
+*.log
+
+# ---- Aire examples: generated outputs ----
+examples/**/build/**
+# common generated trace
+**/trace.json
+
+# ---- Docs build caches (if used later) ----
+.site/
+_site/
+.sphinx/
+.doctrees/
+.cache/
+
+# ---- Test caches ----
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+# ---- Aire: project-specific roles (not for distribution) ----
+claude/roles/gemm-developer/
+claude/roles/gemm-architect/
+claude/roles/ml-invariants-researcher/
+claude/roles/tessa-game-architect/
+claude/roles/tessa-game-developer/
+claude/roles/coretexgrid-developer/
+claude/CoretexGrid_Northstar_v0.1.md
+
+# ---- Codex: project-specific roles (not for distribution) ----
+# codex/roles/<project-slug>/ — add entries here as needed
