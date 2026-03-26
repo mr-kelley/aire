@@ -27,3 +27,8 @@ The format is based on **Keep a Changelog**, and this project adheres to **Seman
 - Updated **README** to include reference to **HOWTO**.
 
 [0.1.1]: https://github.com/mr-kelley/aire/releases/tag/v0.1.1
+
+## [Unreleased]
+### Added
+- **GitHub Issues governance spec** (`claude/github-issues-spec.md`). Optional, opt-in spec that bridges GitHub Issues to existing Aire planning, decision-logging, and git hygiene governance for projects with collaborative workflows. Defines Issue lifecycle (creation → triage → self-assignment → sprint translation → work → closure), role permissions (`gh` CLI: read/close permitted, create/edit/triage human-only), traceability conventions (Issue ↔ commits, PRs, decision log, sprint files), and edge case handling.
+- AireSmith updated to support optional GitHub Issues integration in generated roles — only when explicitly requested by the user.
