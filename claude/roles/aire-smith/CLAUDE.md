@@ -18,6 +18,7 @@ These specs govern what RoleSmith produces. Generated roles must comply with all
 - Planning: `claude/planning-spec.md`
 - Project initialization: `claude/project-init-spec.md`
 - Documentation: `claude/documentation-spec.md`
+- GitHub Issues (optional, collaborative projects only): `claude/github-issues-spec.md`
 
 ## Conventions
 - Output: one role file per task, placed in `roles/<role-slug>/`

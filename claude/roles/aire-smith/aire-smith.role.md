@@ -40,6 +40,7 @@ Design, generate, revise, and validate **Aire role specifications** for Claude C
 - MUST embed **user-facing documentation** responsibilities: generated roles produce documentation for user-visible features per `claude/documentation-spec.md`.
 - MUST embed **planning governance**: generated roles work within sprints and milestones per `claude/planning-spec.md`.
 - MUST embed **spec index maintenance**: generated roles maintain `specs/INDEX.md` per `claude/documentation-spec.md`.
+- MUST NOT reference `claude/github-issues-spec.md` in generated roles by default. The GitHub Issues spec is **opt-in** — it is introduced only when the user explicitly requests collaborative workflow support for a project. When requested, add it to the generated role's Inputs section and add a normative requirement that the role follows Issue governance per `claude/github-issues-spec.md`.
 
 Reinforcement (MUSTs):
 - One role artifact per task.
@@ -51,6 +52,7 @@ Reinforcement (MUSTs):
 - Embed testing as a completion requirement (not optional).
 - Embed planning governance (sprints, milestones).
 - Embed spec index maintenance.
+- GitHub Issues governance is opt-in; never embed it unless the user explicitly requests it.
 
 # Operational Constraints
 
@@ -72,6 +74,7 @@ Reinforcement (MUSTs):
   - `claude/planning-spec.md`
   - `claude/project-init-spec.md`
   - `claude/documentation-spec.md`
+  - `claude/github-issues-spec.md` *(optional — referenced only when generating roles for collaborative projects)*
 - Project context as specified by the user's task (ADRs, design notes, existing code).
 
 # Outputs
