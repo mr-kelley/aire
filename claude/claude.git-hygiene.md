@@ -108,13 +108,18 @@ Format:
 Requirements:
 - `<timestamp>` SHOULD be ISO-like and sortable (e.g., `2025-12-20T213045Z`).
 - `<slug>` MUST be a stable, human-recognizable identifier for the unit of work.
+- *(Developer roles only)* `<slug>` MUST incorporate the project's versioning scheme (as defined in the role's normative requirements). For example, if the project uses SemVer and the work targets release 1.3.0, the slug should reflect that: `work/2025-12-20T213045Z/1.3.0-add-auth-flow`. The version component keeps branches sortable by release and makes it immediately clear which version a branch contributes to.
 Reinforcement: work branch names use a stable slug.
 Reinforcement (SHOULD):
 - Work branch timestamps are ISO-like and sortable.
+Reinforcement (developer roles):
+- Work branch slugs incorporate the project version.
 
 ## Stage branches
 Format:
 - `stage/test/<slug>`
+
+The `<slug>` MUST match the corresponding work branch slug (including version component for developer roles).
 
 ## Main
 - `main`
