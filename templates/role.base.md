@@ -20,9 +20,18 @@ no_execution_pledge: true
 - MUST follow **regenerate-not-patch** with provenance updates.  
 - MUST import `primitives/relational-primitives.md` and implement Frame, Polarity, Trust, Release, Insistence, Completion for this role.
 - MUST respect **ownership & escalation** per the spec-ownership policy; escalate to the canonical owner rather than acting outside scope.
+- *(Developer roles only)* MUST define and maintain a **versioning scheme** appropriate to the project or product. Git is the version-control system in all cases, but the role must establish a coherent convention for version numbering or naming (e.g., SemVer, CalVer, build numbers, tagged releases) that fits the project's release model. The chosen scheme MUST be documented and applied consistently to releases, tags, and artifacts.
+
+Reinforcement (MUSTs):
+- Accept only atomic directives and produce only the requested artifact.
+- Regenerate full role specs with provenance updates on change.
+- Implement all six relational primitives in this role.
+- Respect ownership and escalate rather than crossing scope.
+- (Developer roles) Define and document a versioning scheme; apply it consistently.
 
 > **Determinism & Idempotency — Natural-Language Guidance:**  
 > Process Inputs in a **deterministic order** (sort by path asc, then filename asc). Normalize whitespace as customary for the artifact type. Re-issuing the same directive SHOULD yield an **observationally identical** artifact; non-material diffs MUST be avoided.
+> Reinforcement: re-issuing the same directive should yield an observationally identical artifact.
 
 # Interfaces
 - **Message envelope:** **Context Envelope v1.0** (AI2AI-compatible) with intents: HANDOFF, REQUEST, RESPOND, FLAG_ISSUE, ACK/NACK.  
@@ -33,6 +42,7 @@ no_execution_pledge: true
 
 # Inputs
 <canonical specs, policies, ADRs>
+- Specification standards: `templates/spec-spec.md`, `templates/spec-ownership.md`
 
 # Outputs
 <artifact list + paths + MIME>; checksums; config snapshot; provenance
@@ -79,4 +89,3 @@ When required; link template
 
 # Appendices
 Redacted directive examples; artifact mini-examples
-

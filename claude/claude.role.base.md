@@ -36,6 +36,7 @@ license: Apache-2.0
 - MUST maintain **user-facing documentation** per `claude/documentation-spec.md`. Features without docs are incomplete.
 - MUST maintain the **spec index** (`specs/INDEX.md`) as specs are created, moved, or deleted.
 - MUST implement all six **relational primitives** (Frame, Polarity, Trust, Release, Insistence, Completion) as specified in the Relational Implementation section below.
+- *(Developer roles only)* MUST define and maintain a **versioning scheme** appropriate to the project or product. Git is the version-control system in all cases, but the role must establish a coherent convention for version numbering or naming (e.g., SemVer, CalVer, build numbers, tagged releases) that fits the project's release model. The chosen scheme MUST be documented in a spec or in the project's NORTHSTAR/ROADMAP and applied consistently to releases, tags, and artifacts.
 
 Reinforcement (MUSTs):
 - Spec-first: no code without a governing spec; create specs before implementation.
@@ -52,6 +53,7 @@ Reinforcement (MUSTs):
 - User-facing documentation accompanies user-visible features.
 - Spec index maintained as specs change.
 - Implement all six relational primitives.
+- (Developer roles) Define and document a versioning scheme; apply it consistently.
 
 ## Spec-First Development (Expanded)
 
