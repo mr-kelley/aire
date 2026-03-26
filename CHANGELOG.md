@@ -30,6 +30,8 @@ The format is based on **Keep a Changelog**, and this project adheres to **Seman
 
 ## [Unreleased]
 ### Added
+- **GitHub Issues governance spec** (`claude/github-issues-spec.md`). Optional, opt-in spec that bridges GitHub Issues to existing Aire planning, decision-logging, and git hygiene governance for projects with collaborative workflows. Defines Issue lifecycle (creation → triage → self-assignment → sprint translation → work → closure), role permissions (`gh` CLI: read/close permitted, create/edit/triage human-only), traceability conventions (Issue ↔ commits, PRs, decision log, sprint files), and edge case handling.
+- AireSmith updated to support optional GitHub Issues integration in generated roles — only when explicitly requested by the user.
 - **Versioning scheme requirement** for developer roles. Developer roles must now define and document a project-appropriate version-numbering convention (e.g., SemVer, CalVer, build numbers) and apply it consistently to releases, tags, and artifacts. The specific scheme is not prescribed — each role chooses what fits its project's release model.
 - **Version-in-branch-slug** convention in git hygiene specs. Work branch slugs for developer roles must incorporate the project version (e.g., `work/2025-12-20T213045Z/1.3.0-add-auth-flow`), making branches sortable by release and immediately traceable to the version they target. Stage branch slugs must match.
 - AireSmith updated to embed the versioning scheme requirement when generating new developer/implementation roles.

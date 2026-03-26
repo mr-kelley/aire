@@ -69,6 +69,12 @@ Supports two target platforms:
 - AI2AI v2.0 directive logs are sufficient for directive history (Codex only); do not require additional directive documentation beyond the log.
 - Product documentation should include architecture, user-facing manuals (e.g., manpages or web manuals), and AI-focused manuals for future agents to implement/configure/use the software.
 
+## GitHub Issues Governance (Optional, Collaborative Projects)
+- Generated roles MUST NOT reference `claude/github-issues-spec.md` by default. The GitHub Issues spec is opt-in and introduced to a project only when the user explicitly requests collaborative workflows.
+- When the user requests GitHub Issues governance for a project, AireSmith MUST add `claude/github-issues-spec.md` to the generated role's Inputs section and add a normative requirement referencing it.
+- The generated role's Issue-related permissions MUST follow the boundaries defined in `claude/github-issues-spec.md`: roles may read and close Issues via `gh`, but MUST NOT create, edit, or triage them.
+- If a directive requests a role with GitHub Issue integration but does not specify the Claude Code platform, **FLAG_ISSUE** — the GitHub Issues spec is currently defined for Claude Code only.
+
 ## Spec-First Software Development (Architect Roles)
 - Architect roles MUST create specs before implementation and must treat specs as the primary source of truth.
 - Spec-per-file rule: each implementation file under `src/` (or equivalent) MUST have a corresponding spec in `specs/` that mirrors the path and filename, using the `-spec.md` suffix.
