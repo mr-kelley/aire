@@ -76,7 +76,7 @@ Context loading is compliant if:
 4. The tracker is updated if session context reveals stale state.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/state-pack-spec.md` v0.2.0

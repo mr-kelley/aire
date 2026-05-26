@@ -213,7 +213,7 @@ Reinforcement (SHOULD):
 
 # Change Control
 
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/claude.git-hygiene.md` v0.2.0

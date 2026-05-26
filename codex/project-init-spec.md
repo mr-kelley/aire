@@ -154,7 +154,7 @@ Initialization is complete when:
 6. All initialization work is committed.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/project-init-spec.md` v0.1.0

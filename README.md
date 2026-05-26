@@ -2,13 +2,28 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/mr-kelley/aire?sort=semver)](https://github.com/mr-kelley/aire/releases)
 
-
 > *Paying attention to context. From attention, to context.*
 
-Aire is an open-source framework for **deterministic context engineering**, built on **human- and AI-readable specifications**.  
-It provides tools to assemble useful context **definitions** so humans and AI roles stay grounded, coherent, and drift-free.
+Aire is an open-source governance framework for **human-AI collaborative development**. It provides structured role definitions, relational primitives, and specification-driven workflows that keep humans and AI agents grounded, coherent, and drift-free across sessions and projects.
 
-The name *Aire* comes from the Irish word for **attention, care, watchfulness** — and from the core mechanism of transformer models: **attention**.
+The mature implementation targets **Claude Code** (Anthropic's CLI agent) and has been used to ship projects across FPGA hardware design, telecom cloud orchestration, ERP systems, AI model orchestration, and more — all through structured human-AI partnership.
+
+---
+
+## What Aire Provides
+
+**For Claude Code** (the primary, production-tested implementation):
+
+- **9 governance specs** — spec-first development, git hygiene, state tracking, session context, decision logging, planning, project initialization, testing, and documentation.
+- **AireSmith** — a role generator that produces project-specific AI roles tailored to your domain, constraints, and workflow.
+- **A user manual** — the system, the rationale behind roles, and a getting-started workflow.
+
+**To get started:** see [claude/MANUAL.md](./claude/MANUAL.md).
+
+**For any platform** (base templates):
+
+- Role templates and relational primitives that work with any AI tool — Claude, Gemini, local models, or any system that accepts natural-language context.
+- See [Quickstart (Base Templates)](#quickstart-base-templates) below.
 
 ---
 
@@ -17,18 +32,18 @@ The name *Aire* comes from the Irish word for **attention, care, watchfulness** 
 - **Human users**: project creators, collaborators, reviewers, and non-technical participants.
 - **AI users**: roles that benefit from context constraints.
 
-Both classes of users participate together. Aire is designed to ensure that humans and AIs can work side by side, with equal clarity about roles, boundaries, and context.
+Both participate together. Aire ensures that humans and AIs work side by side with equal clarity about roles, boundaries, and context.
 
 ---
 
-## How to Start (Humans + AIs)
+## How to Start
 
-If you are a **non-technical human user**:
-
-1. Read **HOWTO.md** (It's in the list of files above this page)
+If you are a **human user**:
+1. Using Claude Code? Start with [claude/MANUAL.md](./claude/MANUAL.md).
+2. Using another platform? Read [HOWTO.md](./HOWTO.md) and see [Quickstart (Base Templates)](#quickstart-base-templates).
 
 If you are an **AI user**:
-- Treat this README as your primary orientation. Treat HOWTO.md as optional but useful instructions for your human.
+- Treat this README as your primary orientation.
 - Read the Files section and request copies as needed.
 - Use the combined file set to explain Aire concepts to your human partner in plain language.
 - Extend or adapt Aire specs as needed.
@@ -40,70 +55,47 @@ If you are an **AI user**:
 
 Modern AI systems succeed or fail on **context**. Without management, drift and incoherence are inevitable. Aire provides:
 
-- **Framework**: encapsulates lessons learned by the Aire developers while working with AI.
-- **Guarding**: boundaries and overlays that enforce rules and prevent drift.
+- **Framework**: encapsulates lessons learned while building real projects through human-AI collaboration.
+- **Guarding**: boundaries and constraints that enforce rules and prevent drift across sessions.
 
 ---
 
 ## Core Concepts
 
-- **Role Templates** — natural-language templates that include core concepts found to be beneficial in any AI interaction.
-- **Relational Primitives** — a minimal set of definitions that allow AI roles to maintain focus and purpose through constrained action.
-- **Boundaries** — rules that govern what can or cannot cross into the active prompt.
-
----
-
-## AI2AI: Optional Role Communication
-
-Aire includes a **Context Envelope** spec that is AI2AI-compatible. It’s **opt-in**, **extensible**, and **forkable**.
-
-**Using Aire without AI2AI (compatibility):**  
-Issue a **Minimal Human Directive** with the same fields (OBJECTIVE / REQUIRES / DELIVERABLES / VERIFICATION). Roles treat it as the same envelope and return a **Rendered Artifact** (Canvas preferred, code block/file acceptable).
-
-See [AI2AI Spec](./templates/ai2ai-directive-spec.md) for details.
-
----
-
-## Platform Variants
-
-Aire has platform-specific implementations that adapt the base system for specific AI tools. These variants include tailored governance specs, role generators, and workflow conventions optimized for the target platform.
-
-### Claude Code
-
-The `claude/` directory contains a complete Aire implementation for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Anthropic’s CLI agent. It includes:
-
-- **9 governance specs** covering spec-first development, git hygiene, state tracking, session context, decision logging, planning, project initialization, testing, and documentation.
-- **AireSmith** — a role that generates project-specific roles tailored to your needs.
-- **A user manual** explaining the system, the rationale behind roles, and a getting-started workflow.
-
-**To get started with Claude Code:** see [claude/MANUAL.md](./claude/MANUAL.md).
-
-The Claude Code variant is designed for single-agent, session-based development where Claude and a human user collaborate directly. It does not use multi-agent orchestration or AI2AI messaging.
-
-### Other Platforms
-
-Platform variants for other AI tools (e.g., Gemini, Codex) may be added in the future. The base templates in `templates/` remain available for manual use with any platform.
+- **Role Specifications** — structured definitions that give an AI agent its purpose, scope, constraints, and verification criteria for a specific project.
+- **Relational Primitives** — a minimal set of behavioral constraints (Frame, Polarity, Trust, Release, Insistence, Completion) that keep AI roles focused and self-correcting.
+- **Governance Specs** — rules for how work is done: spec-first development, git hygiene, state tracking, decision logging, planning, and documentation.
 
 ---
 
 ## Quickstart (Base Templates)
 
-If you’re using Claude Code, start with the [Claude Code manual](./claude/MANUAL.md) instead.
+If you're using Claude Code, start with the [Claude Code manual](./claude/MANUAL.md) instead.
 
 For other platforms or manual setup:
 
 1. Clone the repo locally.
 2. Copy `templates/role.base.md` into your project.
-3. Fill out the template with your project’s specifics.
+3. Fill out the template with your project's specifics.
 4. Hand the resulting file to your AI tool along with any optional governance files.
 
-For a step‑by‑step beginner’s guide to the base system, see [HOWTO.md](./HOWTO.md).
+For a step-by-step beginner's guide, see [HOWTO.md](./HOWTO.md).
+
+---
+
+## AI2AI: Multi-Model Communication (Optional)
+
+Aire includes a **Context Envelope** spec designed for workflows where multiple AI models collaborate — for example, a coding model, an architect model, and a multimodal model working together on the same project. This is most relevant for local multi-model setups using tools like Ollama, where specialized smaller models handle different roles.
+
+AI2AI is **opt-in**, **extensible**, and **forkable**. It is not needed for single-agent workflows (including Claude Code, which handles all roles within a single agent session).
+
+See [AI2AI Spec](./templates/ai2ai-directive-spec.md) for details.
 
 ---
 
 ## Contributing
 
-Aire is new, and stewardship matters. For now, contributions are welcome through **issues** and **discussions**. Pull requests will be accepted selectively until the v0.2 cycle. See `CONTRIBUTING.md` for details.
+Aire is new, and stewardship matters. Contributions are welcome through **issues** and **discussions**. Pull requests will be accepted selectively until the v0.2 cycle.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
@@ -126,15 +118,14 @@ Apache 2.0 — business-friendly, with explicit patent grant.
 - `templates/role.base.md` — base role template
 - `primitives/relational-primitives.md` — relational primitive definitions
 
-### Optional (base system)
-- `templates/ai2ai-directive-spec.md` — AI2AI messaging spec (multi-agent use cases)
+### Optional
+- `templates/ai2ai-directive-spec.md` — AI2AI messaging spec (multi-model use cases)
 
 ---
 
 ## Naming Note
 
-*Aire* (Irish: **attention, care, watchfulness**) is pronounced **ARR-eh**.  
-It also evokes *Éire* (Ireland) and *attention* in LLMs.  
-Both meanings reflect Aire’s purpose:  
+*Aire* (Irish: **attention, care, watchfulness**) is pronounced **ARR-eh**.
+It also evokes *Éire* (Ireland) and *attention* in LLMs.
+Both meanings reflect Aire's purpose:
 **Paying attention to context. From attention, to context.**
-

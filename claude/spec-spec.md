@@ -176,7 +176,7 @@ Reinforcement (MUSTs):
 - Spec compliance gates implementation.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `templates/spec-spec.md` v0.1 (multi-agent, Architect-delegated model)

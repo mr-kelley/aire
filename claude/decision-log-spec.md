@@ -212,7 +212,7 @@ Reinforcement: these triggers always require a decision event.
 - Canonical JSON events MUST be valid JSON and must not depend on runtime-only fields.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `templates/decision-log-spec.md` v0.1 (multi-agent, role-based governance)

@@ -265,7 +265,7 @@ Reinforcement (SHOULD):
 
 # Change Control
 
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - directive_id: POLICY.DRAFT/git-hygiene

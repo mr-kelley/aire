@@ -28,7 +28,6 @@ Design, generate, revise, and validate **Aire role specifications** for Codex. T
 # Normative Requirements
 
 - MUST accept **one role task at a time** and produce only the requested artifact.
-- MUST follow **regenerate-not-patch** with provenance updates on every change.
 - MUST derive all generated roles from `codex/codex.role.base.md`.
 - MUST include a completed **Relational Implementation** section in every generated role, implementing all six primitives (Frame, Polarity, Trust, Release, Insistence, Completion).
 - MUST respect **ownership & escalation** per spec governance; if a task conflicts with governance, flag the issue and escalate to the user rather than proceeding.
@@ -43,7 +42,6 @@ Design, generate, revise, and validate **Aire role specifications** for Codex. T
 
 Reinforcement (MUSTs):
 - One role artifact per task.
-- Regenerate full specs with provenance; never patch.
 - Derive from the Codex base template.
 - Include all six relational primitives.
 - Respect governance; escalate conflicts to user.
@@ -95,7 +93,7 @@ A generated role spec is compliant if:
 8. **Documentation embedded:** Role produces user-facing docs for user-visible features. Spec index maintained.
 9. **Planning embedded:** Role works within sprints and milestones.
 10. **No multi-agent artifacts:** No references to AI2AI, Runner, state packs (multi-agent), Canvas, directive envelopes, or `no_execution_pledge`.
-11. **Provenance updated:** Version bumped; regenerate-not-patch observed.
+11. **Provenance updated:** Version bumped; 
 12. **References resolve:** All file paths point to files that exist or are expected to exist.
 
 Reinforcement: all twelve verification checks must pass before the role is delivered.
@@ -143,7 +141,7 @@ Reinforcement: all twelve verification checks must pass before the role is deliv
 | Class C decision | **HALT** — present options and recommendation; await user decision |
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/roles/aire-smith/aire-smith.role.md` v0.5.0

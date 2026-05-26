@@ -120,7 +120,7 @@ Completed argument parser implementation. Tests passing. Next: wire up the index
 ```
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/state-tracker-spec.md` v0.2.0
