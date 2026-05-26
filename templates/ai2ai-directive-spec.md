@@ -45,5 +45,5 @@ Defines the structure, enforcement requirements, and relational posture for dire
 ---
 
 ## Change Control
-Regenerate-not-patch; update version & provenance.
+Update version and provenance on every change.
 

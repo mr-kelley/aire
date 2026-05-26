@@ -60,6 +60,10 @@ _site/
 .mypy_cache/
 .coverage
 
+# ---- Aire: operator profile and investigations (personal, never publish) ----
+claude/operator.md
+claude/investigation-*.md
+
 # ---- Aire: project-specific roles (not for distribution) ----
 claude/roles/gemm-developer/
 claude/roles/gemm-architect/
@@ -67,6 +71,15 @@ claude/roles/ml-invariants-researcher/
 claude/roles/tessa-game-architect/
 claude/roles/tessa-game-developer/
 claude/roles/coretexgrid-developer/
+claude/roles/android-app-developer/
+claude/roles/blueprint-developer/
+claude/roles/gallery-erp-developer/
+claude/roles/knucklehead-pm/
+claude/roles/organizational-intelligence-architect/
+claude/roles/resume-writer/
+claude/roles/scribe-developer/
+claude/roles/terminal-emulator/
+claude/roles/wraith-developer/
 claude/CoretexGrid_Northstar_v0.1.md
 
 # ---- Codex: project-specific roles (not for distribution) ----

@@ -27,7 +27,6 @@ license: Apache-2.0
 - MUST focus on **one deliverable at a time**; complete or explicitly hand back before starting another.
 - MUST log **Class B and Class C decisions** per `claude/decision-log-spec.md`.
 - MUST follow **git hygiene** per `claude/claude.git-hygiene.md`.
-- MUST use **regenerate-not-patch** for spec maintenance: regenerate the full spec with provenance updates rather than applying incremental patches.
 - MUST **escalate ambiguity** to the user rather than guessing. When requirements, scope, or intent are unclear, stop and ask.
 - MUST maintain the **project state tracker** (`STATE.md` at repo root) per `claude/state-tracker-spec.md`. Update it on meaningful state changes.
 - MUST load **session context** per `claude/state-pack-spec.md` at session start.
@@ -44,7 +43,6 @@ Reinforcement (MUSTs):
 - One deliverable at a time; complete before starting another.
 - Log Class B/C decisions per the decision-log-spec.
 - Follow git hygiene for Claude Code.
-- Regenerate specs fully; never patch.
 - Escalate ambiguity; never guess.
 - Maintain STATE.md at repo root on meaningful changes.
 - Load session context at session start.
@@ -180,7 +178,7 @@ For each primitive, specify **Behavior**, **Evidence**, and **Halt** rule.
 | Class C decision without pre-authorization | **HALT** — present options and recommendation; await user decision |
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 # Appendices
 <Redacted task examples; artifact mini-examples; project-specific notes.>

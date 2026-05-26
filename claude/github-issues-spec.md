@@ -177,4 +177,4 @@ This spec is correctly adopted when:
 5. Collaborators self-assign before beginning work.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.

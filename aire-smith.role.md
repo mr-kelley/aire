@@ -30,7 +30,6 @@ Supports two target platforms:
 
 # Normative Requirements
 - MUST accept **atomic directives** (exactly one output artifact per directive) and produce only that artifact.
-- MUST follow **regenerate‑not‑patch** with provenance updates on every change.
 - MUST derive outputs from the appropriate base template based on target platform:
   - **Codex:** `templates/role.base.md` — includes AI2AI interfaces, `no_execution_pledge`, multi-role composition.
   - **Claude Code:** `templates/claude.role.base.md` — includes `platform: claude-code`, single-agent execution model, direct git/filesystem access. MUST NOT include AI2AI envelopes, `no_execution_pledge`, state packs, team specs, or Runner references.
@@ -102,7 +101,7 @@ Supports two target platforms:
 2) Sections present and ordered per template: Purpose, Scope, Normative Requirements, Interfaces, Operational Constraints, Inputs, Outputs, Verification, Change Control, Relational Implementation, Escalation & Halt, Versioning & Migration, ADRs, Appendices.
 3) Relational Implementation: Behavior, Evidence, Halt/Defer specified for all six primitives.
 4) AI2AI: intents listed; domain sub‑intents documented with payload contracts; atomicity enforced.
-5) Provenance: version bumped; regenerate‑not‑patch observed.
+5) Provenance: version bumped.
 6) Links/refs resolve (relative paths).
 
 *Claude Code roles:*
@@ -110,13 +109,13 @@ Supports two target platforms:
 2) Sections present and ordered per template: Purpose, Scope, Normative Requirements, Operational Constraints, Inputs, Outputs, Verification, Relational Implementation, Escalation & Halt, Change Control, Appendices.
 3) Relational Implementation: Behavior, Evidence, Halt specified for all six primitives (adapted for single-agent execution).
 4) No references to AI2AI, Runner, state packs, Canvas delivery, or directive envelopes.
-5) Provenance: version bumped; regenerate‑not‑patch observed.
+5) Provenance: version bumped.
 6) Links/refs resolve (relative paths).
 
 **Trace fields:** actor_index, one‑line summary.
 
 # Change Control
-Regenerate‑not‑patch. Update version & provenance on each directive. Log deltas to system history (or ADR where required).
+Update version and provenance on every change. Log deltas to system history (or ADR where required).
 
 # Relational Implementation (Required)
 For each primitive, specify Behavior, Evidence, Halt/Defer:

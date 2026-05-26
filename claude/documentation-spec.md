@@ -129,4 +129,4 @@ Reinforcement (MUSTs):
 Claude SHOULD propose the appropriate documentation set during project planning (NORTHSTAR.md / ROADMAP.md phase) based on the project type. Documentation milestones should appear in the roadmap.
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.

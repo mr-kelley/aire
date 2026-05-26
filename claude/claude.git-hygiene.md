@@ -218,7 +218,7 @@ Reinforcement (SHOULD):
 
 # Change Control
 
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `templates/team.git-hygiene.md` v0.1.0

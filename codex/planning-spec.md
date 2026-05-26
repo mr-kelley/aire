@@ -185,7 +185,7 @@ Planning artifacts are compliant if:
 5. STATE.md reflects current planning state (active milestone, active sprint).
 
 # Change Control
-Regenerate-not-patch. Update version and provenance on every change.
+Update version and provenance on every change.
 
 ## Provenance
 - source: Adapted from `claude/planning-spec.md` v0.1.0
