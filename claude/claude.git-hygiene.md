@@ -1,6 +1,6 @@
 ---
 title: Git Hygiene Strategy (Claude Code, Audit-First)
-version: 0.2.0
+version: 0.3.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, hygiene]
 status: draft
@@ -27,13 +27,13 @@ This strategy is designed for environments where:
 ## Covers
 - Local branching, merging, and commit conventions.
 - Task-based commit traceability.
-- Test-stage promotion models (A/B/C) that projects select explicitly.
+- Promotion profiles (A/B) that projects select explicitly.
 - Claude Code responsibilities for committing, merging, and preserving audit trails.
 
 ## Does Not Cover
 - Remote publishing policy (explicitly human-only).
 - CI vendor configuration, hosted branch protection settings, or platform-specific PR rules.
-- Project-specific test definitions (projects define what tests exist; this spec defines how test stages are represented in git).
+- Project-specific test definitions (projects define what tests exist; this spec defines how tested promotion is represented in git).
 
 # Core Invariants (Normative)
 
@@ -41,8 +41,8 @@ This strategy is designed for environments where:
    - If a repo is initialized with a different default (e.g., `master`), Claude Code MUST rename it to `main` immediately, before any other work begins. There is no `master` branch — only `main`.
 
 2) **No untested code in `main`.**
-   - Projects MUST define a promotion profile (A/B/C) that determines what "tested" means.
-   - For profiles B and C: tests MUST exist and MUST pass before promotion. "Tests not written yet" is not a valid promotion state — it means the work is not done.
+   - Projects MUST define a promotion profile (A/B) that determines what "tested" means.
+   - For Profile B: tests MUST exist and MUST pass before promotion. "Tests not written yet" is not a valid promotion state — it means the work is not done.
    - Profile A (docs/policy) is the only profile where untested promotion is permitted.
 
 3) **Claude Code never pushes to remote.**
@@ -62,7 +62,7 @@ This strategy is designed for environments where:
 Reinforcement (MUSTs):
 - Normalize the local repo to include `main` when the default differs.
 - Define exactly one promotion profile to define "tested."
-- Tests must exist and pass before promotion (profiles B and C).
+- Tests must exist and pass before promotion (Profile B).
 - Never push to or reconfigure remotes.
 - Never delete branches unless the user explicitly requests it.
 - Keep the working tree clean before switching tasks.
@@ -79,21 +79,22 @@ Reinforcement: each project picks exactly one promotion profile.
 For projects or changes that are purely documentation, governance, or policy. No tests required for promotion.
 
 ## Profile B — Tested Promotion (Default for Software)
-`work/<slug>` → `stage/test/<slug>` → `main`
+`work/<slug>` → `main`, gated by a recorded test PASS against the exact SHA being merged.
 
-The default for any project with testable code. All tests — unit, integration, e2e, whatever the governing spec's Test Strategy requires — run before promotion from `stage/test` to `main`.
+The default for any project with testable code. All tests — unit, integration, e2e, whatever the governing spec's Test Strategy requires — run on the work branch tip before promotion to `main`.
 
-Test categorization (unit vs. integration vs. e2e) is defined in specs and organized in test files, not in branch topology. One stage branch runs all required tests. This keeps branching simple while the spec-spec Test Strategy section ensures thorough coverage.
+Test categorization (unit vs. integration vs. e2e) is defined in specs and organized in test files, not in branch topology. This keeps branching simple while the spec-spec Test Strategy section ensures thorough coverage.
 
-**Sprint-to-branch mapping:** Each sprint maps 1:1 to a work branch. One sprint, one `work/<timestamp>/<slug>` branch, one promotion path through `stage/test/<slug>` to `main`. Claude MUST NOT mix work from multiple sprints on a single branch, and MUST NOT split a single sprint across multiple work branches.
+**Sprint-to-branch mapping:** Each sprint maps 1:1 to a work branch. One sprint, one `work/<timestamp>/<slug>` branch, one promotion to `main`. Claude MUST NOT mix work from multiple sprints on a single branch, and MUST NOT split a single sprint across multiple work branches.
 
 **Promotion flow:**
 1. Create `work/<timestamp>/<slug>` when the sprint starts.
 2. Develop on the work branch (atomic commits as work progresses).
-3. When implementation and tests are complete, merge to `stage/test/<slug>`.
-4. Run all tests required by governing specs on the stage branch.
-5. If PASS: merge to `main`.
-6. If FAIL: fix on the work branch, re-promote to `stage/test/<slug>`, re-test.
+3. When implementation and tests are complete, run all tests required by the governing specs on the work branch tip.
+4. If PASS: merge to `main` and write the promotion record (below).
+5. If FAIL: fix on the work branch, re-run; do not promote until PASS.
+
+**Promotion record:** every Profile B promotion to `main` MUST be recorded as an annotated tag `promote/<slug>` on the merge commit. The tag message records, at minimum: the sprint reference, the governing spec(s), the test outcome with the exact SHA the tests ran against, and related decision IDs. Promotion records are the auditable evidence that nothing reached `main` untested; a project history report can be generated from them at any time.
 
 Notes:
 - The project defines what verification constitutes PASS.
@@ -115,9 +116,9 @@ Reinforcement (SHOULD):
 Reinforcement (developer roles):
 - Work branch slugs incorporate the project version.
 
-## Stage branches
+## Promotion tags
 Format:
-- `stage/test/<slug>`
+- `promote/<slug>`
 
 The `<slug>` MUST match the corresponding work branch slug (including version component for developer roles).
 
@@ -168,14 +169,14 @@ Reinforcement (MAY):
 Reinforcement: preserve auditability by retaining all branches.
 
 ## Promotion conditions
-A promotion from one branch to the next (work → stage, stage → stage, stage → main) MUST occur only when:
+A promotion from a work branch to `main` MUST occur only when:
 - tests exist for all testable deliverables (per the governing spec's Test Strategy section),
 - the relevant test outcome is **PASS**, and
-- the outcome is recorded (in commit message or decision log) including the final SHA.
+- the outcome is recorded in the promotion record (annotated `promote/<slug>` tag) including the exact SHA tested.
 
 There is no "promote now, test later" path. If tests are missing, the work is incomplete and MUST NOT be promoted.
 
-Reinforcement: promote only when tests exist, tests PASS, and the outcome is recorded with the final SHA.
+Reinforcement: promote only when tests exist, tests PASS, and the outcome is recorded in the promotion record with the tested SHA.
 
 If FAIL:
 - do not promote;
@@ -221,6 +222,9 @@ Reinforcement (SHOULD):
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000002 and DEC-000007. Removed Profile C residue (A/B/C → A/B). Collapsed the stage/test branch layer: Profile B now promotes work → main directly, gated by a recorded test PASS against the exact merged SHA, with promotion evidence captured in annotated `promote/<slug>` tags. Promotion records replace branch topology as the audit mechanism.
+
 - source: Adapted from `templates/team.git-hygiene.md` v0.1.0
 - time: 2026-03-04
 - actor_index: aire-system
