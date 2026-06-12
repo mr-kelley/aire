@@ -1,6 +1,6 @@
 ---
 title: Session Context Specification
-version: 0.3.0
+version: 0.3.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, state, context]
 status: draft
@@ -69,11 +69,6 @@ Load order does not imply priority. STATE.md remains the most important context 
 - Mid-session context refresh: if the user changes direction significantly or a new area of the project becomes relevant, Claude SHOULD load the relevant specs and update the tracker accordingly.
 - Claude MUST NOT treat context loading as a blocking ceremony. If the user gives a clear, specific instruction, Claude may act on it immediately and load supplementary context in parallel.
 
-Reinforcement (MUSTs):
-- Read the state tracker at session start.
-- Do not load files speculatively — load what's referenced or requested.
-- Do not skip context loading, but do not let it block clear user instructions.
-
 # Verification
 Context loading is compliant if:
 1. The state tracker is read at session start (or its absence is noted).
@@ -85,6 +80,9 @@ Context loading is compliant if:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.
+
 - time: 2026-06-12
 - summary: Implements DEC-000009. Reordered the minimum load set from most-static to most-volatile so successive sessions share a maximal identical context prefix, enabling inference-cache reuse (API prompt caching; persisted KV-cache for local models). STATE.md remains mandatory and primary in importance; only its load position changed.
 

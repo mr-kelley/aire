@@ -1,6 +1,6 @@
 ---
 title: Planning Artifacts Specification
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, planning]
 status: draft
@@ -92,11 +92,6 @@ Milestones are ordered by dependency, not by date. The first milestone has no de
 - Adding or removing milestones is a Class B decision (log it).
 - Reordering milestones that changes dependency structure is a Class B decision.
 
-Reinforcement (MUSTs):
-- Milestones define outcomes, not tasks.
-- Update milestone status as work progresses.
-- Log milestone additions/removals as Class B decisions.
-
 # Sprints
 
 ## Purpose
@@ -148,12 +143,6 @@ Optional. Context, design considerations, open questions.
 - Sprint scope changes (adding/removing deliverables) after work has started are Class B decisions.
 - Creating a sprint for work outside the current active milestone is a Class B decision.
 
-Reinforcement (MUSTs):
-- Sprints include acceptance criteria with passing tests.
-- Update sprint status as work progresses.
-- Complete or pause the current sprint before starting a new one.
-- Log sprint scope changes as Class B decisions.
-
 # Workflow Integration
 
 ## Project Start
@@ -186,3 +175,7 @@ Planning artifacts are compliant if:
 
 # Change Control
 Update version and provenance on every change.
+
+## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.

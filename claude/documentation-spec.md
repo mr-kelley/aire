@@ -1,6 +1,6 @@
 ---
 title: User-Facing Documentation Specification
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, documentation]
 status: draft
@@ -109,12 +109,6 @@ A table of contents for all specs in the project. Helps Claude (and humans) loca
 - A feature is not complete until its documentation is written or updated.
 - Documentation updates are part of the sprint acceptance criteria, alongside passing tests.
 
-Reinforcement (MUSTs):
-- README.md exists for every project.
-- User-visible features include documentation in sprint deliverables.
-- Spec index is maintained as specs change.
-- Documentation matches current behavior.
-
 # When to Create What
 
 | Project State | Documentation Required |
@@ -130,3 +124,7 @@ Claude SHOULD propose the appropriate documentation set during project planning 
 
 # Change Control
 Update version and provenance on every change.
+
+## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.

@@ -1,6 +1,6 @@
 ---
 title: Decision Log Specification
-version: 0.3.0
+version: 0.3.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, decisions]
 status: draft
@@ -106,8 +106,6 @@ IDs MUST be deterministic and collision-free.
 3. Write N+1 back to `SEQ.txt`.
 4. Use `DEC-` + zero-padded 6-digit N+1 as the ID.
 
-Reinforcement: decision IDs are deterministic and never collide.
-
 # Governance Behavior
 
 ## When Claude MUST log a decision
@@ -118,8 +116,6 @@ A decision event MUST be created when:
 - Security posture changes.
 - An architectural pattern is adopted that affects multiple modules.
 - The user makes a significant project direction choice (Claude logs it on their behalf with `made_by: "user"` or `"claude+user"`).
-
-Reinforcement: these triggers always require a decision event.
 
 ## Claude's decision behavior by class
 - **Class A**: Proceed. Logging optional.
@@ -183,6 +179,9 @@ Reinforcement: these triggers always require a decision event.
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.
+
 - time: 2026-06-12
 - summary: Implements DEC-000005. Removed the SQLite derived index and CLI contract — normative requirements for tooling that was never built. The canonical JSON store, ID allocation, decision classes, and governance behavior are the complete specification. File-level search suffices at current scale; because events are canonical and append-only, an index can be added later without migration.
 
