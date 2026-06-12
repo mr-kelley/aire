@@ -2,7 +2,7 @@
 role: <Human-readable name>
 actor: AI
 platform: claude-code
-version: 0.2.0
+version: 0.3.0
 maintained_by: <name/role>
 domain_tags: [system, governance]
 status: draft | stable | deprecated
@@ -37,65 +37,17 @@ license: Apache-2.0
 - MUST implement all six **relational primitives** (Frame, Polarity, Trust, Release, Insistence, Completion) as specified in the Relational Implementation section below.
 - *(Developer roles only)* MUST define and maintain a **versioning scheme** appropriate to the project or product. Git is the version-control system in all cases, but the role must establish a coherent convention for version numbering or naming (e.g., SemVer, CalVer, build numbers, tagged releases) that fits the project's release model. The chosen scheme MUST be documented in a spec or in the project's NORTHSTAR/ROADMAP and applied consistently to releases, tags, and artifacts.
 
-Reinforcement (MUSTs):
-- Spec-first: no code without a governing spec; create specs before implementation.
-- Spec-per-file mapping enforced for source code.
-- One deliverable at a time; complete before starting another.
-- Log Class B/C decisions per the decision-log-spec.
-- Follow git hygiene for Claude Code.
-- Escalate ambiguity; never guess.
-- Maintain STATE.md at repo root on meaningful changes.
-- Load session context at session start.
-- Work within the current sprint and milestone.
-- Tests are a completion requirement, not optional.
-- User-facing documentation accompanies user-visible features.
-- Spec index maintained as specs change.
-- Implement all six relational primitives.
-- (Developer roles) Define and document a versioning scheme; apply it consistently.
-
-## Spec-First Development (Expanded)
-
-Specs are the primary source of truth. Implementation is downstream of specs, never the other way around.
-
-**Workflow:**
-1. Before starting implementation work, check if a governing spec exists.
-2. If no spec exists: create one (or propose a draft for user review) before writing any implementation code.
-3. If a spec exists but the requested work would change behavior: update the spec first, then implement.
-4. If the spec and implementation disagree: the spec is authoritative. Fix the implementation, or update the spec with user approval, then fix the implementation.
-
-**What requires a spec:**
-- New modules, features, or components.
-- Changes to public interfaces, APIs, or data formats.
-- Architectural patterns that affect multiple files.
-- Behavior that another developer (or future Claude session) would need to understand.
-
-**What does not require a spec:**
-- Trivial fixes (typos, formatting, one-line bug fixes with obvious correctness).
-- Test files (they are governed by the spec of the code they test).
-- Build configuration and generated code.
-
-**Spec quality:**
-- Specs MUST explicitly declare behavioral expectations. Implicit behavior is a defect.
-- Specs MUST be clear enough that implementation is mechanical — if the spec is ambiguous, fix the spec before coding.
-- Specs MUST stay current. A stale spec is worse than no spec because it misleads.
-
-Reinforcement (MUSTs):
-- Check for governing spec before any implementation work.
-- Create specs before code when none exist.
-- Update specs before (or alongside) behavior changes.
-- Spec and implementation must agree; disagreement is always a defect.
-- Specs must be explicit, current, and unambiguous.
+Each requirement above is a pointer: the cited spec is the owning document and states the rule in full (see the Rule Ownership section of `claude/spec-spec.md`). The workflow for spec-first development — what requires a spec, what does not, and spec quality requirements — is owned by `claude/spec-spec.md`.
 
 > **Determinism & Idempotency — Natural-Language Guidance:**
 > Process inputs in a **deterministic order** (sort by path asc, then filename asc). Normalize whitespace as customary for the artifact type. Re-running the same task SHOULD yield an **observationally identical** artifact; non-material diffs MUST be avoided.
-> Reinforcement: re-running the same task should yield an observationally identical artifact.
 
 # Operational Constraints
 <Execution boundaries, file-path roots, safety defaults, environment pins.>
 
 - Output files MUST stay within the declared project root.
 - MUST NOT modify files outside the declared scope without explicit user approval.
-- MUST NOT push to remote repositories unless the user explicitly requests it.
+- Remote publishing is governed by `claude/claude.git-hygiene.md` (the owning spec): pushing is human-only; PR creation requires explicit per-case user authorization.
 - Safety: treat governance references as immutable unless the user provides an approved update path.
 
 # Inputs
@@ -130,8 +82,6 @@ Before declaring a task done, self-check:
 9. **Decision log:** Class B/C decisions encountered during the task are recorded.
 10. **State tracker:** STATE.md is updated to reflect completed work and current project state.
 11. **Sprint status:** Active sprint file is updated; acceptance criteria are checked.
-
-Reinforcement: complete all eleven verification checks before declaring done.
 
 # Relational Implementation (Required)
 For each primitive, specify **Behavior**, **Evidence**, and **Halt** rule.
@@ -179,6 +129,10 @@ For each primitive, specify **Behavior**, **Evidence**, and **Halt** rule.
 
 # Change Control
 Update version and provenance on every change.
+
+## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed the Reinforcement echo of the normative requirements and the Spec-First Development (Expanded) section — its content moved to `claude/spec-spec.md`, the owning spec. Normative requirements are now pointers to owning specs per the Rule Ownership rule. Remote-publishing constraint now defers to `claude/claude.git-hygiene.md`, resolving the push-rule contradiction recorded in DEC-000011.
 
 # Appendices
 <Redacted task examples; artifact mini-examples; project-specific notes.>

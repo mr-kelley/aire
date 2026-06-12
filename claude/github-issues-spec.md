@@ -1,6 +1,6 @@
 ---
 title: GitHub Issues Governance (Collaborative Workflows)
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, github, collaboration]
 status: draft
@@ -51,8 +51,6 @@ The project owner triages Issues. Triage means:
 
 Roles MUST NOT self-triage. A role may read an Issue for context, but it MUST NOT begin work on an Issue that the project owner has not explicitly approved for work — either by assigning it to a milestone, labeling it as ready, or directly instructing the role to work on it.
 
-Reinforcement: roles do not decide what Issues become work. The project owner decides.
-
 ## Assignment
 Collaborators self-assign Issues they intend to work on. Self-assignment signals to other collaborators that the work is claimed. A collaborator SHOULD NOT begin work on an Issue without assigning it first.
 
@@ -66,8 +64,6 @@ Once an Issue is assigned and ready for work, the collaborator translates it int
 
 This translation step is critical. It brings the Issue's intent into the repo where the role can consume it without depending on GitHub access.
 
-Reinforcement: the sprint file governs execution, not the Issue.
-
 ## Work
 Work proceeds under normal role governance — spec-first, one deliverable at a time, tested promotion. The only addition is traceability back to the Issue (see Traceability below).
 
@@ -78,8 +74,6 @@ Issues are closed by one of:
 - **Closure without work**: the project owner closes the Issue as `not planned` if it is out of scope, a duplicate, or otherwise not actionable.
 
 Roles MAY close Issues via `gh issue close` only when the associated work is complete, tests pass, and the PR has been merged. Premature closure — before work is verified — is not permitted.
-
-Reinforcement: Issues close when work is verified complete, not before.
 
 # Traceability
 
@@ -101,8 +95,6 @@ Traceability connects Issues to the project's audit trail. The goal is bidirecti
 ## Issue → Sprint
 - The sprint file that contains the Issue's work MUST reference the Issue number in its deliverables or goal section.
 
-Reinforcement: PRs must reference the Issue with a closing keyword. Commits and decision log entries should reference the Issue number.
-
 # Role Permissions
 
 Roles may use the `gh` CLI to interact with Issues, subject to these constraints:
@@ -120,8 +112,6 @@ Roles may use the `gh` CLI to interact with Issues, subject to these constraints
 - `gh issue edit` — roles do not modify Issue titles, descriptions, labels, or milestones. Triage and metadata are human-owned.
 - `gh issue reopen` — roles do not reopen closed Issues. If a closed Issue needs to be revisited, the human decides.
 - `gh issue transfer`, `gh issue pin`, `gh issue lock` — administrative actions are human-only.
-
-Reinforcement: roles read and close Issues; humans create, edit, and triage them.
 
 # Labels
 
@@ -178,3 +168,7 @@ This spec is correctly adopted when:
 
 # Change Control
 Update version and provenance on every change.
+
+## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.

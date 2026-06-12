@@ -1,6 +1,6 @@
 ---
 title: Project State Tracker Specification
-version: 0.2.0
+version: 0.2.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, state]
 status: draft
@@ -72,12 +72,6 @@ Optional. Brief notes from the most recent session — what was done, what was l
 - The user MAY edit the tracker directly. Claude MUST treat user edits as authoritative and not silently revert them.
 - On session start, Claude SHOULD read the tracker to restore context.
 
-Reinforcement (MUSTs):
-- Update the tracker on meaningful state changes.
-- Keep the tracker concise and human-readable.
-- Treat user edits to the tracker as authoritative.
-- Do not revert or overwrite user modifications without explicit instruction.
-
 # Verification
 The tracker is compliant if:
 1. It is valid Markdown with all required sections present.
@@ -123,6 +117,9 @@ Completed argument parser implementation. Tests passing. Next: wire up the index
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.
+
 - source: Adapted from `templates/state-tracker-spec.md` v0.1 (JSON, multi-agent, per-directive overwrite model)
 - time: 2026-03-05
 - summary: Converted from machine-first JSON to human-readable Markdown. Replaced per-directive overwrite semantics with continuous maintenance model. Removed directive bundle, checksum, and Runner/Orchestrator references. Designed for shared Claude + human use across sessions. File location moved to STATE.md at repository root for visibility.

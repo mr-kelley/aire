@@ -1,6 +1,6 @@
 ---
 title: Project Initialization Specification
-version: 0.1.0
+version: 0.2.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, initialization]
 status: draft
@@ -43,6 +43,7 @@ CLAUDE.md MUST contain:
 4. **Planning references**: paths to NORTHSTAR.md and ROADMAP.md. Instruction to consult them for project direction.
 5. **Governance references**: paths to spec-spec, decision-log-spec, git-hygiene, and other active governance files. Instruction to follow them.
 6. **Key conventions**: any project-specific conventions not covered by role files (e.g., language, framework, preferred tools). Keep this short.
+7. **Constraints digest**: reference to `claude/constraints-digest.md` — the one-line-per-rule summary of active constraints with pointers to owning specs. The CLAUDE.md reference brings it into session context until hook-based injection exists.
 
 ## Rules
 - CLAUDE.md MUST be concise. It is a pointer and a brief instruction set, not a comprehensive document.
@@ -73,6 +74,7 @@ Follow these specs:
 - Decision logging: `claude/decision-log-spec.md`
 - Git hygiene: `claude/claude.git-hygiene.md`
 - Testing: see spec-spec.md Test Strategy requirements and git-hygiene promotion rules.
+- Active constraints: `claude/constraints-digest.md`
 
 ## Conventions
 - Language: Python 3.12+
@@ -139,11 +141,6 @@ When a user starts a new project with Aire governance:
 - The user MUST review and approve NORTHSTAR.md and ROADMAP.md before development begins. These are the guiding documents — Claude does not proceed on guesses.
 - If role files need to be created (via AireSmith), that happens before Phase 1.
 
-Reinforcement (MUSTs):
-- Commit after each phase.
-- User reviews and approves northstar and roadmap before development.
-- Role files exist before initialization begins.
-
 # Verification
 Initialization is complete when:
 1. CLAUDE.md exists and references the active role, STATE.md, and governance specs.
@@ -155,3 +152,7 @@ Initialization is complete when:
 
 # Change Control
 Update version and provenance on every change.
+
+## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003. Removed Reinforcement restatement block. Added the constraints digest (claude/constraints-digest.md) to the required CLAUDE.md structure and example.
