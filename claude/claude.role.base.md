@@ -2,11 +2,28 @@
 role: <Human-readable name>
 actor: AI
 platform: claude-code
-version: 0.3.0
+version: 0.4.0
 maintained_by: <name/role>
 domain_tags: [system, governance]
 status: draft | stable | deprecated
 license: Apache-2.0
+
+# Coverage binding (per claude/coverage-spec.md)
+coverage_model: code | artifact | advisory | none
+coverage_config: <paths / globs / joins per the coverage model; one-line justification if none>
+
+# Governance versions this role was generated against (per Governance Version Pinning below)
+governance:
+  claude.role.base: <version>
+  spec-spec: <version>
+  coverage-spec: <version>
+  decision-log-spec: <version>
+  claude.git-hygiene: <version>
+  state-tracker-spec: <version>
+  state-pack-spec: <version>
+  planning-spec: <version>
+  project-init-spec: <version>
+  documentation-spec: <version>
 ---
 
 # Purpose
@@ -23,7 +40,7 @@ license: Apache-2.0
 # Normative Requirements
 
 - MUST follow **spec-first development**: no implementation without a governing spec. Check for existing specs before implementation; create or propose specs when none exist. Modifying behavior requires updating the governing spec first. (See `claude/spec-spec.md`.)
-- MUST enforce **spec-per-file mapping**: each implementation file under `src/` (or equivalent) has a corresponding spec in `specs/` mirroring the path with a `-spec.md` suffix. Generalized specs supplement but never replace per-file specs.
+- MUST declare and honor a **coverage binding** per `claude/coverage-spec.md`: every unit the role produces is covered by a spec, verified mechanically per the coverage contract.
 - MUST focus on **one deliverable at a time**; complete or explicitly hand back before starting another.
 - MUST log **Class B and Class C decisions** per `claude/decision-log-spec.md`.
 - MUST follow **git hygiene** per `claude/claude.git-hygiene.md`.
@@ -38,6 +55,14 @@ license: Apache-2.0
 - *(Developer roles only)* MUST define and maintain a **versioning scheme** appropriate to the project or product. Git is the version-control system in all cases, but the role must establish a coherent convention for version numbering or naming (e.g., SemVer, CalVer, build numbers, tagged releases) that fits the project's release model. The chosen scheme MUST be documented in a spec or in the project's NORTHSTAR/ROADMAP and applied consistently to releases, tags, and artifacts.
 
 Each requirement above is a pointer: the cited spec is the owning document and states the rule in full (see the Rule Ownership section of `claude/spec-spec.md`). The workflow for spec-first development — what requires a spec, what does not, and spec quality requirements — is owned by `claude/spec-spec.md`.
+
+# Governance Version Pinning
+
+Every generated role records, in its `governance:` header block, the version of each governance spec it was generated against. This makes governance-to-role drift visible and reconciliation deliberate:
+
+- **At generation:** AireSmith stamps current spec versions into the block.
+- **At audit:** the rule-liveness audit compares pins against current spec versions; mismatches become a worklist, never silence.
+- **Reconciliation:** content-level drift (rules clarified in the owning spec) propagates automatically through pointer-style references and is merely noted. Interface-level drift (new required declarations, removed sections, changed contracts) requires regenerating the role via AireSmith — always human-triggered, never silent.
 
 > **Determinism & Idempotency — Natural-Language Guidance:**
 > Process inputs in a **deterministic order** (sort by path asc, then filename asc). Normalize whitespace as customary for the artifact type. Re-running the same task SHOULD yield an **observationally identical** artifact; non-material diffs MUST be avoided.
@@ -131,6 +156,9 @@ For each primitive, specify **Behavior**, **Evidence**, and **Halt** rule.
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12 (second revision)
+- summary: Implements DEC-000006 and DEC-000008. Header gains the coverage binding (coverage_model / coverage_config per claude/coverage-spec.md) and the governance version-pin block. Spec-per-file requirement replaced by the coverage contract pointer. New Governance Version Pinning section defines stamp-at-generation, audit comparison, and semver-keyed reconciliation.
+
 - time: 2026-06-12
 - summary: Implements DEC-000003. Removed the Reinforcement echo of the normative requirements and the Spec-First Development (Expanded) section — its content moved to `claude/spec-spec.md`, the owning spec. Normative requirements are now pointers to owning specs per the Rule Ownership rule. Remote-publishing constraint now defers to `claude/claude.git-hygiene.md`, resolving the push-rule contradiction recorded in DEC-000011.
 
