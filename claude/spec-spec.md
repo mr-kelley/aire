@@ -1,6 +1,6 @@
 ---
 title: Specification Structure Standard
-version: 0.3.0
+version: 0.4.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, specs]
 status: draft
@@ -19,7 +19,7 @@ This standard applies to every spec used to design, implement, or validate softw
 - Required structure and sections for all spec files.
 - Behavioral declaration rules (what must be made explicit).
 - Spec-first development principles, including what requires a spec.
-- Spec-to-implementation mapping conventions.
+- Spec coverage requirements (granularity and declarations; verification owned by `claude/coverage-spec.md`).
 - Rule ownership: where governance rules are stated and how they are referenced.
 
 ## Does Not Cover
@@ -71,23 +71,18 @@ Every normative rule in the governance set has exactly one **owning spec** — t
 
 # Spec-to-Implementation Mapping
 
-Every implementation file under `src/` (or the project's equivalent source directory) MUST have a corresponding spec.
+Every unit a role produces MUST be covered by a spec. Coverage is declared and mechanically verified per `claude/coverage-spec.md` (the owning spec): roles declare a coverage model (code, artifact, advisory, or justified none); specs declare what they cover via the `covers:` header field; a conforming mapper verifies that coverage is total.
 
-**Mapping convention:**
-- Spec location: `specs/` directory, mirroring the source path.
-- Naming: source filename with a `-spec.md` suffix.
-- Example: `src/auth/token.py` → `specs/src/auth/token-spec.md`
+**Granularity** is a project choice: per-file specs (mirroring paths, `-spec.md` suffix — e.g., `src/auth/token.py` → `specs/src/auth/token-spec.md`) remain a good default for complex modules, and component specs covering several related files are equally valid. Many-to-one coverage is permitted; uncovered units are not.
 
-**Generalized specs** (covering multiple files or cross-cutting concerns) are allowed but they supplement per-file specs — they never replace them. Generalized specs should be documented in a spec index or README within `specs/`.
-
-**When mapping doesn't apply:**
-- Configuration files, build scripts, and generated code do not require per-file specs.
+**When coverage doesn't apply:**
+- Configuration files, build scripts, and generated code do not require specs.
 - Test files do not require their own specs (they are *governed by* the spec of the code they test).
 - Specs themselves do not require specs (this document is the meta-spec).
 
 ## Spec-to-Test Mapping
 
-Parallel to spec-per-file, every spec that defines testable behavior MUST have corresponding tests.
+Parallel to spec coverage, every spec that defines testable behavior MUST have corresponding tests.
 
 **Mapping convention:**
 - Test location: `tests/` directory, mirroring the source path.
@@ -183,6 +178,9 @@ If a required behavior is missing from a spec, Claude MUST flag it and amend the
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000006. Spec-to-implementation mapping defers to claude/coverage-spec.md: path-mirroring is no longer the universal rule; coverage is declared (role bindings + covers: fields) and mechanically verified, with granularity a per-project choice. Uncovered units remain forbidden.
+
 - time: 2026-06-12
 - summary: Implements DEC-000003. Added the Rule Ownership (Single Statement) section — every rule has one owning spec; other documents point, never restate. Absorbed the "what requires a spec" and spec-quality content formerly duplicated in claude.role.base.md (this spec is the owner). Removed Reinforcement restatement blocks.
 
