@@ -6,7 +6,7 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Project initialization sprint** — branch `work/2026-06-12T202232Z/project-init`. Bringing this repo under its own governance: STATE.md, NORTHSTAR.md, specs/INDEX.md, sprint records. Status: in-progress (NORTHSTAR awaiting operator approval). Sprint file: `sprints/aire-cli/01-project-init.md`.
+- **Project initialization sprint** — branch `work/2026-06-12T202232Z/project-init`. Bringing this repo under its own governance: STATE.md, NORTHSTAR.md, specs/INDEX.md, sprint records. Status: in-progress (NORTHSTAR approved by operator 2026-06-12; awaiting promotion to main). Sprint file: `sprints/aire-cli/01-project-init.md`.
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
@@ -34,7 +34,7 @@ Decision log: `claude/decisions/events/` (DEC-000001…DEC-000013, private). Loa
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 
 ## Open Questions
-- NORTHSTAR.md draft awaiting operator review/approval (blocks Phase 3 / CLI development).
+- Does this repo get its own AireSmith-generated maintainer role, or continue as operator-paired sessions? (Affects root CLAUDE.md generation; does not block CLI work. See `sprints/aire-cli/01-project-init.md`.)
 - Pilot-role observations — any v0.4.0 structure friction feeds back before bulk migration.
 - First liveness-audit run (manual, per `claude/audit-spec.md`) — schedule after init completes.
 
