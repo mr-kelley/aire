@@ -1,6 +1,7 @@
 *.password
 .gitattributes
-.github/
+# .github/ is tracked (issue/PR templates); workflows are added deliberately
+.github/workflows/
 # .gitignore — this file is tracked
 
 # ---- OS / Editor junk ----
