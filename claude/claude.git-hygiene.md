@@ -1,6 +1,6 @@
 ---
 title: Git Hygiene Strategy (Claude Code, Audit-First)
-version: 0.3.0
+version: 0.3.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, hygiene]
 status: draft
@@ -59,19 +59,9 @@ This strategy is designed for environments where:
    - Claude Code MUST commit before any file that was modified would be modified again in a separate logical change.
    - Exception: iterative edits within the same atomic task (e.g., successive refinements to the same function) are permitted as a single commit.
 
-Reinforcement (MUSTs):
-- Normalize the local repo to include `main` when the default differs.
-- Define exactly one promotion profile to define "tested."
-- Tests must exist and pass before promotion (Profile B).
-- Never push to or reconfigure remotes.
-- Never delete branches unless the user explicitly requests it.
-- Keep the working tree clean before switching tasks.
-- Commit before re-editing a file in a separate logical change.
-
 # Promotion Profiles (Normative)
 
 Each project MUST explicitly choose exactly one profile.
-Reinforcement: each project picks exactly one promotion profile.
 
 ## Profile A — No-Test Promotion (Docs/Policy)
 `work/<slug>` → `main`
@@ -110,11 +100,6 @@ Requirements:
 - `<timestamp>` SHOULD be ISO-like and sortable (e.g., `2025-12-20T213045Z`).
 - `<slug>` MUST be a stable, human-recognizable identifier for the unit of work.
 - *(Developer roles only)* `<slug>` MUST incorporate the project's versioning scheme (as defined in the role's normative requirements). For example, if the project uses SemVer and the work targets release 1.3.0, the slug should reflect that: `work/2025-12-20T213045Z/1.3.0-add-auth-flow`. The version component keeps branches sortable by release and makes it immediately clear which version a branch contributes to.
-Reinforcement: work branch names use a stable slug.
-Reinforcement (SHOULD):
-- Work branch timestamps are ISO-like and sortable.
-Reinforcement (developer roles):
-- Work branch slugs incorporate the project version.
 
 ## Promotion tags
 Format:
@@ -151,22 +136,17 @@ When a commit implements or relates to a logged decision, the commit message bod
   - before switching to a different task,
   - before any file would be modified a second time in a separate logical change.
 - Claude Code SHOULD make atomic, meaningful commits — one logical change per commit.
-Reinforcement: commit before task switches and before re-editing files in separate changes.
 
 # Merge & Promotion Rules (Normative)
 
 ## General
 - Claude Code MAY use merge commits, fast-forward merges, or squash merges on local branches.
 - Projects MAY prefer squash merges into `main` to keep `main` history sparse.
-Reinforcement (MAY):
-- Claude Code may use merge, fast-forward, or squash merges locally.
-- Projects may prefer squash merges into `main`.
 
 ## Squash merges (allowed with audit preservation)
 - Squash merges into `main` are ALLOWED.
 - Because squash merges collapse commit detail on `main`, auditability MUST be preserved on the source branches:
   - Claude Code MUST retain all branches (already required), ensuring the full pre-squash history remains reachable.
-Reinforcement: preserve auditability by retaining all branches.
 
 ## Promotion conditions
 A promotion from a work branch to `main` MUST occur only when:
@@ -175,8 +155,6 @@ A promotion from a work branch to `main` MUST occur only when:
 - the outcome is recorded in the promotion record (annotated `promote/<slug>` tag) including the exact SHA tested.
 
 There is no "promote now, test later" path. If tests are missing, the work is incomplete and MUST NOT be promoted.
-
-Reinforcement: promote only when tests exist, tests PASS, and the outcome is recorded in the promotion record with the tested SHA.
 
 If FAIL:
 - do not promote;
@@ -191,22 +169,13 @@ If BLOCKED:
 - PRs MAY be used when collaboration benefits.
 - PRs are OPTIONAL and MUST NOT be required for single-developer operation.
 - If used, PR title/description SHOULD reference relevant decision IDs and task context.
-Reinforcement: PRs remain optional and are never required for solo operation.
-Reinforcement (SHOULD):
-- PR titles and descriptions reference decision IDs when PRs are used.
-Reinforcement (MAY):
-- PRs may be used when they help collaboration.
+- Pushing remains human-only in all cases (Core Invariant 3). On a branch the user has already pushed, Claude Code MAY create a PR only when the user explicitly authorizes it for that specific PR; standing authorization is never assumed. (Per DEC-000011.)
 
 # Tags & Releases (Optional)
 
 - Annotated tags MAY be created locally to mark release points.
 - Tag messages SHOULD include a brief summary and relevant decision IDs.
 - Claude Code MUST NOT push tags to remote.
-Reinforcement: tag pushes to remote are forbidden for Claude Code.
-Reinforcement (SHOULD):
-- Tag messages include a brief summary and decision IDs when applicable.
-Reinforcement (MAY):
-- Annotated tags may be created locally to mark release points.
 
 # Guardrails (Recommended)
 
@@ -214,14 +183,15 @@ Projects SHOULD adopt guardrails that increase determinism and reduce drift:
 - Stable `.gitignore` conventions per language/platform.
 - Local checks (lint/test) executed under explicit user request.
 - Meaningful commit messages that enable `git log` archaeology.
-Reinforcement (SHOULD):
-- Adopt guardrails such as stable `.gitignore`, local checks, and meaningful commit messages.
 
 # Change Control
 
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000003 (Reinforcement blocks removed; rules stated once) and codifies the DEC-000011 ruling: PR creation on an already-pushed branch is permitted with explicit per-case user authorization; pushing remains human-only.
+
 - time: 2026-06-12
 - summary: Implements DEC-000002 and DEC-000007. Removed Profile C residue (A/B/C → A/B). Collapsed the stage/test branch layer: Profile B now promotes work → main directly, gated by a recorded test PASS against the exact merged SHA, with promotion evidence captured in annotated `promote/<slug>` tags. Promotion records replace branch topology as the audit mechanism.
 
