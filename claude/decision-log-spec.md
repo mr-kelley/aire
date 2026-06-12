@@ -1,6 +1,6 @@
 ---
 title: Decision Log Specification
-version: 0.2.0
+version: 0.3.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, decisions]
 status: draft
@@ -13,18 +13,17 @@ Create a searchable, auditable decision record so that Claude and the user can c
 
 This spec defines:
 - The canonical decision event format (append-only JSON files).
-- A derived SQLite full-text search index.
-- A minimal CLI contract for search and retrieval.
+- Decision ID allocation.
 - Decision classification and governance behavior for the Claude + human model.
+
+Searching the log is file-level (grep/jq over the JSON events). Because the events are canonical and append-only, a derived search index can be added later without migration if scale ever demands it.
 
 # Scope
 
 ## Covers
 - Decision event schema and storage.
 - Decision ID allocation.
-- Search index generation and rebuild.
 - Decision classification (A/B/C) and when to log.
-- CLI verbs for managing decisions.
 
 ## Does Not Cover
 - What constitutes a correct decision (that's domain-specific).
@@ -34,7 +33,6 @@ This spec defines:
 # Definitions
 - **Decision Event**: An immutable record capturing a single decision, its context, alternatives, and rationale.
 - **Canonical Store**: The JSON event files in `decisions/events/`. Source of truth.
-- **Derived Index**: The SQLite database. Rebuildable from canonical events at any time.
 - **Decision ID**: Stable identifier of the form `DEC-000123`.
 
 # Directory Layout
@@ -47,12 +45,10 @@ decisions/
     DEC-000001.json
     DEC-000002.json
     ...
-  index.sqlite         # derived — rebuildable from events/
   README.md            # (optional) usage notes
 ```
 
 - `decisions/events/*` are the **only** canonical records.
-- `decisions/index.sqlite` is **derived** and may be deleted and regenerated at any time.
 
 # Decision Event Schema
 
@@ -111,33 +107,6 @@ IDs MUST be deterministic and collision-free.
 4. Use `DEC-` + zero-padded 6-digit N+1 as the ID.
 
 Reinforcement: decision IDs are deterministic and never collide.
-
-# Search Index (SQLite, Derived)
-
-- The SQLite database MUST be reconstructible from `decisions/events/*.json`.
-- The database is for speed and convenience — it MUST NOT be required for correctness.
-- Location: `decisions/index.sqlite`
-
-## Required capabilities
-- Full-text search across: `title`, `decision`, `rationale`, `tags`, `scope.paths`, `scope.areas`.
-- Filter by: `id`, `made_by`, `decision_class`, `project`, `ts` range.
-- Deterministic rebuild from canonical JSON events.
-
-Reinforcement: SQLite is always rebuildable from JSON and never required for correctness.
-
-# CLI Contract (Minimal)
-
-Implementations SHOULD expose these verbs (names are illustrative; behavior is normative):
-
-**`dec add`** — Create a new decision event with the next ID. Validates required fields before writing.
-
-**`dec show DEC-XXXXXX`** — Display the canonical JSON (or a formatted view).
-
-**`dec search <query>`** — Full-text search using the index. Falls back to scanning JSON files if the index is missing.
-
-**`dec list [filters]`** — Structured filtering: `--class B`, `--made-by claude`, `--since 2026-01-01`, `--project aire`.
-
-**`dec rebuild-index`** — Delete and regenerate `decisions/index.sqlite` from canonical events.
 
 # Governance Behavior
 
@@ -207,14 +176,16 @@ Reinforcement: these triggers always require a decision event.
 ```
 
 # Determinism Requirements
-- Given the same canonical event set, `dec rebuild-index` MUST produce functionally equivalent search results.
-- `dec search` MUST return stable ordering for ties (sort by `ts desc`, then `id desc`).
 - Canonical JSON events MUST be valid JSON and must not depend on runtime-only fields.
+- Decision IDs MUST be allocated deterministically (see Decision ID Allocation) and never reused.
 
 # Change Control
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-12
+- summary: Implements DEC-000005. Removed the SQLite derived index and CLI contract — normative requirements for tooling that was never built. The canonical JSON store, ID allocation, decision classes, and governance behavior are the complete specification. File-level search suffices at current scale; because events are canonical and append-only, an index can be added later without migration.
+
 - source: Adapted from `templates/decision-log-spec.md` v0.1 (multi-agent, role-based governance)
 - time: 2026-03-05
 - summary: Adapted for Claude Code single-agent + human model. Replaced role field with made_by (claude/user/claude+user). Removed Runner/Developer/Architect/Tester role distinctions. Simplified governance behavior for single-agent decision-making. Updated schema name to aire.decisions.v0.2. Preserved core concepts: append-only JSON events, derived SQLite index, decision classes A/B/C, CLI contract.

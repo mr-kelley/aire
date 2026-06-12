@@ -142,7 +142,7 @@ Git branching, commit conventions, and promotion rules. Two profiles: **Profile 
 Defines STATE.md — a human-readable project state file at the repo root. This is your primary way to see where things stand. Claude maintains it; you can read or edit it at any time.
 
 ### state-pack-spec.md (Session Context)
-Defines what Claude loads at the start of each session to restore context. STATE.md first, then role spec, then git state, then whatever else is relevant.
+Defines what Claude loads at the start of each session to restore context, ordered most-static to most-volatile (role and governance first, STATE.md and git state last) so successive sessions share a cacheable context prefix. STATE.md remains the most important file regardless of load position.
 
 ### decision-log-spec.md
 Structured decision recording. Three classes: **A** (free to decide), **B** (decide and log), **C** (escalate to you). Decisions are stored as JSON files — searchable, auditable, and version-controlled.
