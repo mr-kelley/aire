@@ -5,16 +5,18 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 ---
 
 ## Milestone: Governance Consolidation
-**Status:** active
+**Status:** completed
 
 **Outcome:** Every governance rule is stated exactly once, in exactly one owning spec. Reinforcement-style duplication is removed, internal inconsistencies are resolved, and other documents reference rules by pointer rather than restatement. The per-session token cost of loading governance drops materially with no loss of meaning.
+
+**Completion evidence:** PRs #6–#8. All Reinforcement blocks removed across the governance set; Rule Ownership section live in spec-spec v0.4.0; the role base is pointer-style (v0.4.0); two internal contradictions (promotion profile residue, push-rule exception) found and resolved; constraints digest created as the single reinforcement source.
 
 **Dependencies:** none.
 
 ---
 
 ## Milestone: Gate-Enforced Promotion
-**Status:** planned
+**Status:** active
 
 **Outcome:** Promotion to `main` is gated by machinery, not discipline. Each promotion carries a structured record (tests run, outcomes, governing specs, exact SHA), and a generated history report can present a project's full audit trail — every promotion tested, every escalation resolved — in a form digestible by non-technical readers.
 
@@ -41,7 +43,7 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 ---
 
 ## Milestone: Role Lifecycle Management
-**Status:** planned
+**Status:** active
 
 **Outcome:** Generated roles record the governance spec versions they were built against. Drift between current governance and deployed roles is mechanically detectable, and reconciliation (regeneration via AireSmith) is deliberate and auditable rather than silent.
 
