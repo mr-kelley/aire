@@ -6,10 +6,11 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Aire CLI bootstrap sprint** — branch `work/2026-06-13T124029Z/aire-cli-bootstrap`. First Profile B code in the repo. Done: spec-first foundation (architecture + doctor specs), the package skeleton, and `aire doctor` (22-test suite green; runs clean on this repo). Next on this branch: `aire history record`, then the repo's first self-written `promote/*` tag at merge. Status: in-progress. Sprint file: `sprints/aire-cli/02-cli-bootstrap.md`.
+- No active development sprint. The Aire CLI milestone continues next with `aire map` (coverage), `aire audit`, `aire digest`, and `aire history report` — each already governed by an existing spec.
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- Aire CLI bootstrap: `aire doctor` + `aire history record`, zero-dependency, 30 tests green; first self-written promotion record (`promote/aire-cli-bootstrap`) — PR #12 — 2026-06-13.
 - Project initialization: repo brought under its own governance (STATE/NORTHSTAR/INDEX/sprints) — PR #11 — 2026-06-12.
 - CLI governing specs (promotion-record, audit) + roadmap maintenance — PR #9 — 2026-06-12.
 - Coverage contract + governance version pinning (coverage-spec v0.1.0, role-base v0.4.0, aire-smith v0.7.0) — PR #8 — 2026-06-12.
