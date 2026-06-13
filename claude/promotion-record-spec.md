@@ -1,6 +1,6 @@
 ---
 title: Promotion Record Specification
-version: 0.2.0
+version: 0.3.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, promotion, audit]
 status: draft
@@ -66,8 +66,11 @@ The generator walks `main`'s merge commits and `promote/*` tags, joins sprint fi
 3. **Audit chain view**: for any given promotion, the full traceable chain: issue (if any) → sprint → spec(s) → commits → test record → promotion tag → decisions.
 
 Rules:
-- Reports are **derived artifacts**: regenerated from canonical state (git + tags + sprint files + decision events) on demand; never hand-edited; deterministic output (stable ordering by promotion date, then tag name).
-- A merge commit on `main` without a promotion record is itself a finding the report MUST surface (Profile B projects), not silently skip.
+- Reports are **derived artifacts**: regenerated from canonical state (git + tags + sprint files + decision events) on demand; never hand-edited; deterministic output (stable ordering by promotion date — the tagged commit's committer date — then tag name). Dates shown are canonical git commit dates, never the report's generation time.
+- **Recordless-merge classification.** A first-parent merge into `main` without a promotion record MUST be surfaced, never silently skipped — but classified, so the report is honest rather than alarmist:
+  - A recordless merge that changed **code paths** (default `tools/`, `src/`, `tests/`; project-configurable) is a **finding** — code reached `main` without a tested promotion record. The summary's strong claim is "zero code merges without a test record"; findings are surfaced prominently.
+  - A recordless merge that touched only docs/governance paths is **expected** (Profile A bookkeeping) and listed as informational, not a finding.
+- Decision titles in the detail/chain views are joined **best-effort** from the local decision log; when a referenced decision is not locally present (e.g., a public clone where the log is gitignored), the report shows the decision ID alone and never fails.
 - The generator reads repo state only: no network, no writes beyond the report files.
 
 # Inputs
@@ -96,6 +99,8 @@ Implemented and tested in the Aire CLI project. Tests MUST verify: payload parse
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.3.0)
+- summary: Report-generator refinements for the `aire history report` implementation (sprint 03). Recordless first-parent merges are classified — code-path-changing merges are findings, docs-only merges are expected (Profile A) — so the report is honest, not alarmist. Decision-title joins are best-effort against the private log (degrade to ID-only). Clarified that shown dates are canonical commit dates, not generation time.
 - time: 2026-06-13 (v0.2.0)
 - summary: Implements DEC-000017. Tag-message payload changed from YAML to JSON (deterministic: sorted keys, 2-space indent) for stdlib round-trip on both write (`aire history record`) and read (`aire history report`) sides — preserving the zero-dependency thesis (DEC-000016) — and for consistency with the JSON decision log. Fields unchanged.
 - time: 2026-06-12 (v0.1.0)
