@@ -1,0 +1,4 @@
+# Aire project configuration (specs/tools/aire/architecture-spec.md)
+aire_version_min = "0.1.0"
+profile = "B"
+# local_model_floor: unset until measured/decided (DEC-000014).

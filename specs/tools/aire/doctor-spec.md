@@ -1,6 +1,6 @@
 ---
 title: aire doctor Specification
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [tooling, cli, doctor, validation]
 status: draft
@@ -73,7 +73,7 @@ This lets a hook or CI call `aire doctor` as a soft precondition while keeping t
 - **`--json` requested**: only JSON on stdout; any diagnostics go to stderr.
 
 # Test Strategy
-Unit tests (pytest) in `tests/tools/aire/test_doctor.py`, using temporary-directory fixtures simulating repo states:
+Unit tests (stdlib `unittest`, per DEC-000016) in `tests/tools/aire/test_doctor.py`, using temporary-directory fixtures simulating repo states:
 - Each check independently: ok / warn / fail paths (e.g., missing repo, absent vs malformed vs valid config, satisfied vs unsatisfied version pin, each profile value, governance present/absent, STATE.md present/absent, floor set/unset).
 - Aggregate exit code: 0 with only warns, 1 with any fail.
 - `--json` output is valid JSON, ordered by registration, and byte-identical across repeated runs on fixed inputs (determinism).
@@ -88,5 +88,7 @@ Unit tests (pytest) in `tests/tools/aire/test_doctor.py`, using temporary-direct
 Update version and provenance on every change.
 
 ## Provenance
-- time: 2026-06-13
+- time: 2026-06-13 (v0.1.1)
+- summary: Test Strategy switched from pytest to stdlib unittest (DEC-000016). Behavior unchanged; verified against implementation (22-test suite green; `aire doctor` reports 6 ok / 1 warn / 0 fail on this repo, the warn being the undeclared local-model floor).
+- time: 2026-06-13 (v0.1.0)
 - summary: Initial `aire doctor` spec. Read-only environment/repo validation with an extensible check registry; seven v0.1 checks including the CLI version pin (architecture-spec) and the DEC-000014 local-model floor. Diagnostic exit-code semantics (0 warns-only / 1 any-fail / 2 tool-error). Motivated in part by DEC-000012: misconfigurations should be visible, not silent.

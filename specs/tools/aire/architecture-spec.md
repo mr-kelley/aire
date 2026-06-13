@@ -1,6 +1,6 @@
 ---
 title: Aire CLI Architecture Specification
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [tooling, cli, architecture]
 status: draft
@@ -8,9 +8,10 @@ platform: claude-code
 license: Apache-2.0
 covers:
   - tools/aire/__init__.py
+  - tools/aire/__main__.py
   - tools/aire/cli.py
   - tools/aire/config.py
-  - pyproject.toml
+  - tools/pyproject.toml
 ---
 
 # Purpose
@@ -46,17 +47,22 @@ These bind every subcommand. They are the reason the tool exists in the shape it
 
 ```
 tools/
+  pyproject.toml       # package definition; console entry point `aire`
   aire/
-    __init__.py        # version, package metadata
+    __init__.py        # version (single source of truth; pyproject reads it)
+    __main__.py        # `python -m aire` zero-install entry
     cli.py             # entry point: argument parsing, subcommand dispatch
     config.py          # .aire/config.toml loading + version-pin check
     doctor.py          # `aire doctor`        (doctor-spec.md)
-    history.py         # `aire history ...`   (history-spec.md)
+    history.py         # `aire history ...`   (history-spec.md; future sprint)
     # map.py, audit.py, digest.py, hook.py    (future sprints)
-pyproject.toml         # package definition; console_scripts entry point `aire`
 ```
 
-The console entry point `aire` maps to `aire.cli:main`.
+The console entry point `aire` maps to `aire.cli:console_main`; `python -m aire`
+maps to `aire.__main__`. The package is self-contained under `tools/`
+(`pip install -e tools/`), keeping the governance repo from becoming a Python
+package itself. Version lives only in `aire.__init__.__version__`; `pyproject.toml`
+reads it dynamically (single ownership).
 
 # Invocation Contract (Normative)
 
@@ -106,10 +112,10 @@ local_model_floor = 8192     # smallest model context window a role here must se
 - **Malformed `.aire/config.toml`**: treated as misconfiguration (exit 2 for gates); `doctor` surfaces the parse error rather than crashing.
 
 # Test Strategy
-Unit tests (pytest) in `tests/tools/aire/`:
-- Dispatch: no-subcommand, `--version`, `--help`, unknown-subcommand exit codes and streams.
-- Config: load present/absent/malformed `.aire/config.toml`; version-pin comparison (older, equal, newer running version); default supply.
-- Determinism: a representative `--json` output is byte-identical across repeated runs on fixed inputs.
+Unit tests use the standard-library `unittest` framework (no test dependency, per DEC-000016) in `tests/tools/aire/`, runnable via `python -m unittest discover -s tests/tools/aire`:
+- Dispatch: no-subcommand, `--version`, unknown-subcommand exit codes and streams.
+- Config: load present/absent/malformed `.aire/config.toml`; version-pin comparison (older, equal, newer running version, uneven lengths).
+- Determinism: a representative `--json` output is byte-identical across repeated runs on fixed inputs, and ordered by check registration.
 - Constraint guards: assert no module imports a networking or server library (a structural test enforcing constraints 1 and 6).
 Tests follow the spec-to-test mapping in `claude/spec-spec.md`. Each subcommand's own behavioral tests live with its spec.
 
@@ -123,5 +129,7 @@ Tests follow the spec-to-test mapping in `claude/spec-spec.md`. Each subcommand'
 Update version and provenance on every change.
 
 ## Provenance
-- time: 2026-06-13
+- time: 2026-06-13 (v0.1.1)
+- summary: Reconciled with implementation. pyproject.toml lives at tools/ (self-contained package; repo root is not a Python package); added tools/aire/__main__.py for zero-install `python -m aire`; version single-sourced from __init__ via pyproject dynamic; Test Strategy switched from pytest to stdlib unittest (DEC-000016).
+- time: 2026-06-13 (v0.1.0)
 - summary: Initial Aire CLI architecture spec. Implements the DEC-000010 constraints as normative inheritance for all subcommands; defines package layout, invocation contract, exit-code conventions, and the .aire/config.toml model with CLI version pinning (DEC-000008 pattern extended to tooling). First Profile B deliverable in the aire repo.
