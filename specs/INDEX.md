@@ -18,3 +18,5 @@ All specs governing this repository and its deliverables, sorted by path. The go
 | `claude/spec-spec.md` | Specification Structure Standard | Spec structure, spec-first, Rule Ownership | draft |
 | `claude/state-pack-spec.md` | Session Context Specification | Static-first session load order | draft |
 | `claude/state-tracker-spec.md` | Project State Tracker Specification | STATE.md format and maintenance | draft |
+| `specs/tools/aire/architecture-spec.md` | Aire CLI Architecture Specification | Package, dispatch, config model, DEC-000010 constraints | draft |
+| `specs/tools/aire/doctor-spec.md` | aire doctor Specification | Read-only repo/environment validation; extensible check registry | draft |
