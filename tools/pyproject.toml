@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aire"
+description = "Aire governance tooling — deterministic, dependency-free CLI"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dynamic = ["version"]
+# Zero runtime dependencies by design (DEC-000016).
+dependencies = []
+
+[project.scripts]
+aire = "aire.cli:console_main"
+
+[tool.setuptools.dynamic]
+version = { attr = "aire.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aire*"]
