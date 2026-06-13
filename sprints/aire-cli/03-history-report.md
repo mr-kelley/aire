@@ -2,8 +2,11 @@
 sprint: 3
 title: aire history report — the audited project history
 milestone: Gate-Enforced Promotion
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #14 (merge commit `35552b0`). Promotion record `promote/cli-history-report` → `35552b0` written by `aire history record` against the merge commit (tests re-verified green there); `aire history report` now renders 2 tested promotions, 0 findings. Closeout folded into the opening commit of the CI promotion gate sprint — first exercise of the DEC-000018 provisional convention.
 
 ## Goal
 Implement `aire history report` — the read side of the promotion record system. Renders the repo's audited development history from canonical state (promote/* tags + merges + sprint files + decision events) into audience-targeted views. Completes the Gate-Enforced Promotion milestone and produces the management-transparency artifact (NORTHSTAR success criterion 5).
