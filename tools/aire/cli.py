@@ -11,6 +11,7 @@ import sys
 from . import __version__
 from .doctor import run_doctor
 from .history import HistoryError, record as history_record
+from .history_report import run_report as history_report
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -43,6 +44,12 @@ def build_parser() -> argparse.ArgumentParser:
     rec.add_argument("--note", dest="notes", help="optional one-liner")
     rec.add_argument("--dry-run", action="store_true", help="preview; create nothing")
 
+    rep = hsub.add_parser("report", help="render the audited project history")
+    rep.add_argument("--detail", action="store_true", help="per-promotion detail view")
+    rep.add_argument("--chain", metavar="SLUG", help="audit chain for one promotion")
+    rep.add_argument("--ref", default="main", help="ref to analyze (default: main)")
+    rep.add_argument("--json", action="store_true", help="emit JSON")
+
     return parser
 
 
@@ -67,6 +74,15 @@ def main(argv=None) -> int:
                     tests_command=args.tests_command, tests_outcome=args.tests_outcome,
                     specs=args.specs, sprint=args.sprint, decisions=args.decisions,
                     notes=args.notes, dry_run=args.dry_run,
+                )
+            except HistoryError as exc:
+                print(f"error: {exc}", file=sys.stderr)
+                return 2
+        if args.history_command == "report":
+            view = "chain" if args.chain else "detail" if args.detail else "summary"
+            try:
+                return history_report(
+                    view=view, slug=args.chain, ref=args.ref, as_json=args.json,
                 )
             except HistoryError as exc:
                 print(f"error: {exc}", file=sys.stderr)

@@ -20,6 +20,8 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 
 **Outcome:** Promotion to `main` is gated by machinery, not discipline. Each promotion carries a structured record (tests run, outcomes, governing specs, exact SHA), and a generated history report can present a project's full audit trail — every promotion tested, every escalation resolved — in a form digestible by non-technical readers.
 
+**Progress:** Promotion records (`aire history record`) and the history report (`aire history report` — summary/detail/chain/JSON, findings classification) are delivered and demonstrated on this repo. `aire history report` exits nonzero when a code merge lacks a record — the *detection* is complete. The remaining piece is the *enforcing wire*: a merge-gate hook that runs this detection and blocks recordless code promotion — delivered under **Harness Enforcement Layer** (hooks). The milestone completes when that hook lands.
+
 **Dependencies:** Governance Consolidation.
 
 ---

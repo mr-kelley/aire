@@ -6,7 +6,7 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- No active development sprint. The Aire CLI milestone continues next with `aire map` (coverage), `aire audit`, `aire digest`, and `aire history report` — each already governed by an existing spec.
+- **`aire history report` sprint** — branch `work/2026-06-13T140857Z/cli-history-report`. The read side of the promotion system: summary/detail/chain/JSON views, recordless-merge classification, best-effort decision-title join. Done on the branch (38 tests green; renders this repo's history). Status: awaiting merge + post-merge promotion record. Sprint file: `sprints/aire-cli/03-history-report.md`.
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
