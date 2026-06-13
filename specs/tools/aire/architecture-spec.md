@@ -40,6 +40,8 @@ These bind every subcommand. They are the reason the tool exists in the shape it
 5. **Gates fail closed.** A subcommand acting as a gate (e.g., `map check`, a promotion guard) exits nonzero — denying the action — when it cannot verify the invariant, including when its own inputs are missing or malformed. Unavailability of a check is never treated as the check passing.
 6. **No network.** The CLI makes no network calls. It does not push, fetch, authenticate, or contact any service. (Consistent with git hygiene: publishing is human-only.)
 
+   This is not an absence of a collaboration story — it *is* the collaboration story. Cross-machine, inter-role collaboration in Aire flows through external, role-orchestrated, transport-agnostic **pipelines** (Forgejo PRs/Issues, MQTT, synced repos, etc.), never through direct binary-to-binary networking (per DEC-000015). The binary stays network-silent *precisely so that* inter-role communication is carried by an auditable pipeline rather than an ephemeral dark channel — the pipeline exchange becomes canonical, reviewable state, the same way decisions and promotions do. The binary's role in collaboration is to be an excellent producer of **portable, verifiable artifacts** (deterministic, self-contained output) that any pipeline can carry and any remote binary can consume. Because the binary knows nothing of transport, the transport choice stays the operator's and is swappable without touching the tool. Transport is a concern of the role and the pipeline (the judgment and automation layers), never of the deterministic primitive.
+
 # Package Layout
 
 ```

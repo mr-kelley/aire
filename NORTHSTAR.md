@@ -36,6 +36,6 @@ When this is true, AI roles are not assistants that write code; they are governe
 ## Non-Goals
 
 - **Not an orchestration platform.** Aire governs roles; roles orchestrate. The tooling binaries never grow a control plane, a daemon, or a scheduler.
-- **Not a multi-agent framework.** The model is one governed role in partnership with one human operator. (The multi-agent lineage is preserved in `templates/` as history.)
+- **Not a multi-agent framework.** No agent swarm coordinating *within* a single task — the retired AI2AI/Runner/Orchestrator lineage, preserved in `templates/` as history. The unit is one governed role in partnership with one human operator. This is *not* a bar on collaboration: independent operator-paired roles may collaborate as peers *across* projects and machines through external, auditable pipelines (per `claude/github-issues-spec.md` and DEC-000015). The distinction is intra-task swarm (rejected) versus inter-role pipeline collaboration (supported).
 - **Not a hosted service.** Aire is files in repos: specs, roles, records, and a local CLI. Nothing phones home.
 - **Not prompt-engineering tricks.** Aire's value is structure and enforcement, not magic words. If a mechanism only works on one model, it violates principle 6.
