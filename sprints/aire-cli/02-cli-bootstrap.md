@@ -2,8 +2,16 @@
 sprint: 2
 title: Aire CLI bootstrap — skeleton, doctor, first gate
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #12 (merge commit `a0b9aa2`). The repo's first promotion record —
+`promote/aire-cli-bootstrap` → `a0b9aa2`, JSON payload per promotion-record-spec —
+was written by `aire history record` itself, against the merge commit, with tests
+re-verified green on that commit. Self-hosting (NORTHSTAR success criterion 1)
+demonstrated: the CLI certified its own first promotion. The promotion tag is
+local; pushing tags is human-only.
 
 ## Goal
 First Profile B code in this repo: the CLI skeleton under `tools/`, the `doctor` subcommand, and enough of `history` to write this sprint's own promotion record.
