@@ -1,6 +1,6 @@
 ---
 title: Git Hygiene Strategy (Claude Code, Audit-First)
-version: 0.3.1
+version: 0.4.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, hygiene]
 status: draft
@@ -171,6 +171,19 @@ If BLOCKED:
 - If used, PR title/description SHOULD reference relevant decision IDs and task context.
 - Pushing remains human-only in all cases (Core Invariant 3). On a branch the user has already pushed, Claude Code MAY create a PR only when the user explicitly authorizes it for that specific PR; standing authorization is never assumed. (Per DEC-000011.)
 
+# Promotion Gate (CI Enforcement)
+
+The promotion conditions above ("promote only when tests PASS and the outcome is recorded") are enforced by **machinery, not discipline**, via a CI status check. Because the merge to `main` happens on the hosting platform (a PR merge), the enforcing check is server-side (GitHub Actions, or Forgejo Actions for lab-only repos) — not a local hook, which cannot intercept a platform-side merge.
+
+The gate has **two triggers**, because record-existence cannot be checked before the merge commit it tags exists:
+
+1. **On pull request → prevention.** Run the project's test suite (and `aire doctor`). The check is made **required** via branch protection, so code that fails tests cannot merge. This is the strong gate: no untested code reaches `main`.
+2. **On push to `main` → detection.** Run `aire history report`; its nonzero exit on a recordless code merge (a *finding*) fails the job, surfacing any process slip immediately after it lands.
+
+The promotion record itself remains the post-merge step (it annotates the merge commit). Prevention stops untested code; detection catches recordless code at once. Together they satisfy the promotion conditions mechanically.
+
+**Portability.** The gate is authored as a platform-Actions workflow and depends only on the zero-dependency `aire` CLI (no packages to fetch), so the *same* workflow runs on public GitHub and on a private Forgejo instance with a self-hosted runner — serving both published repos and repos that never leave the lab.
+
 # Tags & Releases (Optional)
 
 - Annotated tags MAY be created locally to mark release points.
@@ -189,6 +202,9 @@ Projects SHOULD adopt guardrails that increase determinism and reduce drift:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.4.0)
+- summary: Added the Promotion Gate (CI Enforcement) section — promotion conditions enforced server-side via a CI status check (GitHub/Forgejo Actions); two triggers (PR = tests required, push-to-main = findings detection); platform-portable via the zero-dependency CLI. Completes the enforcement half of Gate-Enforced Promotion (sprint 04).
+
 - time: 2026-06-12
 - summary: Implements DEC-000003 (Reinforcement blocks removed; rules stated once) and codifies the DEC-000011 ruling: PR creation on an already-pushed branch is permitted with explicit per-case user authorization; pushing remains human-only.
 

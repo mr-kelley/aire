@@ -6,10 +6,11 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **`aire history report` sprint** — branch `work/2026-06-13T140857Z/cli-history-report`. The read side of the promotion system: summary/detail/chain/JSON views, recordless-merge classification, best-effort decision-title join. Done on the branch (38 tests green; renders this repo's history). Status: awaiting merge + post-merge promotion record. Sprint file: `sprints/aire-cli/03-history-report.md`.
+- **CI promotion gate sprint** — branch `work/2026-06-13T173940Z/ci-promotion-gate`. Completes Gate-Enforced Promotion: a GitHub Actions gate (tests required on PR = prevention; `aire history report` on push-to-main = findings detection), made a required check via branch protection. Portable to Forgejo Actions for lab repos. Spec-first. Sprint file: `sprints/aire-cli/04-ci-promotion-gate.md`.
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- Aire CLI: `aire history report` — audited history (summary/detail/chain/JSON), findings classification; 38 tests green; second self-written promotion record (`promote/cli-history-report`) — PR #14 — 2026-06-13.
 - Aire CLI bootstrap: `aire doctor` + `aire history record`, zero-dependency, 30 tests green; first self-written promotion record (`promote/aire-cli-bootstrap`) — PR #12 — 2026-06-13.
 - Project initialization: repo brought under its own governance (STATE/NORTHSTAR/INDEX/sprints) — PR #11 — 2026-06-12.
 - CLI governing specs (promotion-record, audit) + roadmap maintenance — PR #9 — 2026-06-12.
@@ -37,6 +38,7 @@ Decision log: `claude/decisions/events/` (DEC-000001…DEC-000013, private). Loa
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 
 ## Open Questions
+- **DEC-000018 (provisional closeout convention)** under evaluation: does folding sprint closeout into the next sprint's opening commit hold up over a few sprints? First exercise: sprint 03 closeout in this branch's opening commit. Compare reality to intent, then declare a manual PASS/FAIL.
 - Does this repo get its own AireSmith-generated maintainer role, or continue as operator-paired sessions? (Affects root CLAUDE.md generation; does not block CLI work. See `sprints/aire-cli/01-project-init.md`.)
 - Pilot-role observations — any v0.4.0 structure friction feeds back before bulk migration.
 - First liveness-audit run (manual, per `claude/audit-spec.md`) — schedule after init completes.

@@ -1,0 +1,33 @@
+# Aire promotion gate (claude/claude.git-hygiene.md — Promotion Gate).
+# Prevention on PRs (tests required); detection on push to main (findings).
+# Zero dependencies — portable to Forgejo Actions with a self-hosted runner.
+name: aire-gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests (stdlib, zero deps)
+        run: python -m unittest discover -s tests/tools/aire -p "test_*.py"
+      - name: aire doctor
+        run: PYTHONPATH=tools python -m aire doctor
+      - name: aire history report — findings detection
+        if: github.event_name == 'push'
+        run: PYTHONPATH=tools python -m aire history report --ref "${GITHUB_REF_NAME}"
