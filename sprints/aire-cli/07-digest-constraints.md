@@ -2,8 +2,11 @@
 sprint: 7
 title: aire digest — derived constraints digest (regenerate-not-patch)
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #20 (merge commit `985e1df`). Promotion record `promote/aire-digest-constraints` → `985e1df` written by `aire history record` against the merge commit (104 tests re-verified green there; `digest check` exits 0 — 15 clauses; `audit` 0 defect; `map check` 58/58). `aire history report` now shows 5 tested promotions, 0 findings. **Closes the Aire CLI milestone** — all subcommands shipped (`doctor`, `history`, `map`, `audit`, `digest`); only the optional `hook` shim remains deferred. Closeout folded into the opening commit of the promotion-tip-grace sprint (DEC-000018, fourth exercise).
 
 ## Goal
 Implement `aire digest` — the subcommand that makes `claude/constraints-digest.md` a **derived artifact that cannot silently fork** from its owning specs. Closes the Aire CLI milestone (last subcommand) and cures a documented wound: the governance-drift investigation found *regenerate-not-patch* had been a dead letter for months — stale digest lines persisted because nobody re-derived the digest. `aire digest` makes regeneration mechanical and drift fail-closed.
