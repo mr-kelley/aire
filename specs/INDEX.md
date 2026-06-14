@@ -19,6 +19,7 @@ All specs governing this repository and its deliverables, sorted by path. The go
 | `claude/state-pack-spec.md` | Session Context Specification | Static-first session load order | draft |
 | `claude/state-tracker-spec.md` | Project State Tracker Specification | STATE.md format and maintenance | draft |
 | `specs/tools/aire/architecture-spec.md` | Aire CLI Architecture Specification | Package, dispatch, config model, DEC-000010 constraints | draft |
+| `specs/tools/aire/audit-spec.md` | aire audit Specification | Liveness audit command surface; nine mechanical checks; severities owned by claude/audit-spec | draft |
 | `specs/tools/aire/doctor-spec.md` | aire doctor Specification | Read-only repo/environment validation; extensible check registry | draft |
 | `specs/tools/aire/history-spec.md` | aire history Specification | Promotion record command surface (record side); format owned by promotion-record-spec | draft |
 | `specs/tools/aire/map-spec.md` | aire map Specification | Coverage command surface + code engine; models owned by coverage-spec | draft |

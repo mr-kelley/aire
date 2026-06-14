@@ -2,8 +2,11 @@
 sprint: 5
 title: aire map — mechanical spec coverage
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #18 (merge commit `8cc50e2`). Promotion record `promote/aire-map-coverage` → `8cc50e2` written by `aire history record` against the merge commit (56 tests re-verified green there; `map check` exits 0, 46/46 units). `aire history report` now shows 3 tested promotions, 0 findings. Closeout folded into the opening commit of the aire-audit sprint — second exercise of the DEC-000018 provisional convention (the first, sprint 03, folded; sprint 04 bundled).
 
 ## Goal
 Implement `aire map` — the coverage mapper (NORTHSTAR success criterion 4). It verifies mechanically that every unit a repo produces is governed by a spec, replacing path-mirroring with declared-and-checked coverage. Dogfooded on aire itself: with the CLI source as the code domain, `map check` must prove every `tools/aire/` public symbol is claimed by a `specs/tools/aire/*.md` spec.

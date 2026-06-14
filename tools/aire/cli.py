@@ -9,6 +9,7 @@ import argparse
 import sys
 
 from . import __version__
+from .audit import run_audit
 from .doctor import run_doctor
 from .history import HistoryError, record as history_record
 from .history_report import run_report as history_report
@@ -34,6 +35,9 @@ def build_parser() -> argparse.ArgumentParser:
     msub.add_parser("check", help="verify coverage (gate; exit 1 on findings)")
     mrep = msub.add_parser("report", help="emit the coverage map")
     mrep.add_argument("--json", action="store_true", help="emit JSON")
+
+    aud = sub.add_parser("audit", help="governance liveness audit (mechanical checks)")
+    aud.add_argument("--json", action="store_true", help="emit JSON")
 
     history = sub.add_parser("history", help="promotion records")
     hsub = history.add_subparsers(dest="history_command", metavar="<action>")
@@ -78,6 +82,8 @@ def main(argv=None) -> int:
             return run_map("check")
         if args.map_command == "report":
             return run_map("report", as_json=args.json)
+    if args.command == "audit":
+        return run_audit(as_json=args.json)
     if args.command == "history":
         if args.history_command is None:
             print("usage: aire history record [options]", file=sys.stderr)

@@ -6,11 +6,12 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 05 — `aire map` (coverage)** — complete on branch `work/2026-06-14T011333Z/aire-map-coverage`, PR in flight. The `code` engine maps spec coverage (NORTHSTAR criterion 4); dogfooded green on aire (46/46 `tools/aire/` units covered). Resolved the deferred binding-location question via DEC-000019 (`.aire/config.toml` `[[coverage]]`). 56 tests green. Next in the Aire CLI milestone: `aire audit` (liveness), then `aire digest`.
+- **Sprint 06 — `aire audit` (governance liveness)** — complete on branch `work/2026-06-14T013400Z/aire-audit-liveness`, PR in flight. Mechanizes the nine DEC-000004 checks (check #1 reuses `map`, #7 reuses `history report`); dogfooded clean of defects on aire (4 candidates from `unknown` decision outcomes, 2 n/a). 86 tests green. Next: `aire digest` (constraints) closes the Aire CLI milestone.
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- Aire CLI: `aire map` — mechanical spec coverage (code engine, AST + `covers:` cross-reference); dogfooded 46/46 units green on aire; role-less binding home `.aire/config.toml` `[[coverage]]` (DEC-000019); 56 tests green; promotion record `promote/aire-map-coverage` — PR #18 — 2026-06-14.
 - **Gate-Enforced Promotion milestone complete**: CI promotion gate (GitHub Actions, required `tests` check + push-to-main findings detection), verified on both halves — PR #15 — 2026-06-13.
 - Aire CLI: `aire history report` — audited history (summary/detail/chain/JSON), findings classification; 38 tests green; second self-written promotion record (`promote/cli-history-report`) — PR #14 — 2026-06-13.
 - Aire CLI bootstrap: `aire doctor` + `aire history record`, zero-dependency, 30 tests green; first self-written promotion record (`promote/aire-cli-bootstrap`) — PR #12 — 2026-06-13.
@@ -33,9 +34,10 @@ Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: P
 - `private/` — personal/legacy working files, never published.
 
 ## Key Decisions
-Decision log: `claude/decisions/events/` (DEC-000001…DEC-000013, private). Load-bearing for current work:
+Decision log: `claude/decisions/events/` (DEC-000001…DEC-000019, private). Load-bearing for current work:
 - DEC-000010: single system-installed CLI; binaries are never orchestrators; no daemons.
 - DEC-000006/000008: coverage contract + version pinning (mechanism live; 27 role migrations pending pilot).
+- DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
 - DEC-000013: private role masters versioned in a dedicated repository; pilot-first migration.
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 
