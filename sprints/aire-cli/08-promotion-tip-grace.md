@@ -17,13 +17,13 @@ This is a real-use-driven refinement ("building the plane while flying it"): the
 - `tests/tools/aire/test_history_report.py` — tip recordless code merge → pending (exit 0); older recordless code merge → finding (exit 1); tip with record → skipped; pending + older finding coexist (still exit 1).
 
 ## Acceptance Criteria
-- [ ] The newest first-parent merge, when a recordless code merge, classifies as `pending` (not a finding); `history report` exits 0.
-- [ ] An older recordless code merge (a newer merge sits above it) remains a finding; `history report` exits 1.
-- [ ] A tip merge that already carries a record is skipped as before (no pending, no finding).
-- [ ] Docs/governance merges are unaffected (still "no record expected").
-- [ ] `audit` check #7 inherits the grace automatically (it reuses `gather().findings`); aire still reports 0 defect.
-- [ ] Tests pass on the work branch tip.
-- [ ] **Dogfood:** with all records pushed, `history report` on aire is unchanged (5 promotions, 0 findings, 0 pending, exit 0).
+- [x] The newest first-parent merge, when a recordless code merge, classifies as `pending` (not a finding); `history report` exits 0.
+- [x] An older recordless code merge (a newer merge sits above it) remains a finding; `history report` exits 1.
+- [x] A tip merge that already carries a record is skipped as before (no pending, no finding).
+- [x] Docs/governance merges are unaffected (still "no record expected").
+- [x] `audit` check #7 inherits the grace automatically (it reuses `gather().findings`); aire still reports 0 defect.
+- [x] Tests pass on the work branch tip (108 green: 104 prior + 4 tip-grace).
+- [x] **Dogfood:** with all records pushed, `history report` on aire is unchanged (5 promotions, 0 findings, 0 pending, exit 0).
 - [ ] Promoted to `main` with a tested promotion record (post-merge, Profile B).
 
 ## Honest scoping
