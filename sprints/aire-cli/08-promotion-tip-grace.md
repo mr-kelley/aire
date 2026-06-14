@@ -2,8 +2,11 @@
 sprint: 8
 title: promotion tip-grace — distinguish record-pending from record-forgotten
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #21 (merge commit `3ca57af`). Promotion record `promote/promotion-tip-grace` → `3ca57af` written by `aire history record` (108 tests re-verified green; `audit`/`map`/`digest` clean). **Validated live on CI:** the push-to-main run for the merge came back green (9s) — before tip-grace it would have been red, because the merge is a recordless code merge at merge time. Reproduced locally: history report classified `3ca57af` as `pending` (0 findings, exit 0), the exact state CI evaluated. The fix proved itself on its own promotion — first real-infrastructure proof, not just unit tests. `aire history report` now shows 6 tested promotions, 0 findings. Closeout folded into the opening commit of the ci-retrigger sprint (DEC-000018, fifth exercise).
 
 ## Goal
 Stop `aire history report` from raising a **false failure** in the unavoidable window between a code merge landing on `main` and its promotion record being pushed. The record certifies the merge commit, so it cannot exist until after the merge; the push-to-main gate runs detection *at merge time*, before the tag lands, and (correctly, but unhelpfully) flags the just-merged code as recordless. The fix differentiates **real** from **false** in the code, never by suppression: the single newest first-parent merge, if it is a recordless code merge, is reported as a distinct `pending` status (informational, exit 0); any *older* recordless code merge remains a finding (exit 1). A forgotten record is therefore still caught — one merge later, when the merge is no longer the tip.
