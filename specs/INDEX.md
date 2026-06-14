@@ -23,4 +23,5 @@ All specs governing this repository and its deliverables, sorted by path. The go
 | `specs/tools/aire/digest-spec.md` | aire digest Specification | Constraints-digest command surface; render/check; derivation owned by spec-spec | draft |
 | `specs/tools/aire/doctor-spec.md` | aire doctor Specification | Read-only repo/environment validation; extensible check registry | draft |
 | `specs/tools/aire/history-spec.md` | aire history Specification | Promotion record command surface (record side); format owned by promotion-record-spec | draft |
+| `specs/tools/aire/hook-spec.md` | aire hook Specification | Layer 2 PreToolUse enforcement primitive; typed [harness] policy (push_policy, protected_paths); exit-code protocol | draft |
 | `specs/tools/aire/map-spec.md` | aire map Specification | Coverage command surface + code engine; models owned by coverage-spec | draft |

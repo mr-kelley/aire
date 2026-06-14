@@ -9,3 +9,14 @@ profile = "B"
 [[coverage]]
 model = "code"
 paths = ["tools/aire/"]
+
+# Harness enforcement policy (claude/harness-enforcement-spec.md; DEC-000023).
+# Read by `aire hook` (Layer 2). Logic is code; this is the per-repo data.
+[harness.push_policy]
+# Pushing is human-only (DEC-000011): deny any session `git push`.
+mode = "human-only"
+
+[harness.protected_paths]
+# Files the agent must never write: the operator's file, personal/legacy
+# working files, and the hook config itself (who-guards-the-guards).
+deny = ["claude/operator.md", "private/**", ".claude/settings.json"]

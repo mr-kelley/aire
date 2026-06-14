@@ -1,6 +1,6 @@
 ---
 title: Harness Enforcement Specification
-version: 0.1.1
+version: 0.1.2
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, enforcement, hooks]
 status: draft
@@ -135,10 +135,9 @@ This spec file itself contains no executable code; it has no unit tests of its o
 # Reference Implementation Scope
 Drawn from DEC-000001 and the milestone decomposition:
 
-- **Sprint 1 (this):** this governing spec.
-- **Sprint 2 — `aire hook` shim:** the deferred CLI `hook` primitive — a `PreToolUse` handler that reads policy-as-data and enforces fail-closed. Governed by `specs/tools/aire/hook-spec.md`.
-- **Sprint 3 — policy data + wiring:** declare aire's hard constraints (push posture / remote classification, protected paths *including the hook config*, commit format) in committed policy; wire the hook + Layer 1 deny rules into `.claude/settings.json`; add Layer 0 push-URL classification to project-init; dogfood blocking a real violation.
-- **Sprint 4 — audit harness check:** `aire audit` verifies declared policy is in force; closes DEC-000001.
+- **Sprint 1 (done):** this governing spec. (PRs #24/#25.)
+- **Sprint 2 — `aire hook` + wiring + dogfood** (scope collapsed by operator decision; folds the original sprint 3): the `PreToolUse` handler that reads the typed `[harness]` policy and enforces fail-closed (`specs/tools/aire/hook-spec.md`); aire's own `[harness]` policy (`push_policy = human-only`, `protected_paths`); registration in `.claude/settings.json`; dogfood. Layer 0 push-URL classification in project-init and Layer 1 deny rules remain available follow-ons.
+- **Sprint 3 — audit harness check:** `aire audit` verifies declared policy is in force; closes DEC-000001.
 
 # Open Design Questions
 *(For operator decision before the implementation sprints — surfaced here rather than silently chosen.)*
@@ -153,6 +152,8 @@ Drawn from DEC-000001 and the milestone decomposition:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.1.2)
+- summary: Reference Implementation Scope updated to reflect the operator decision to collapse the original sprints 2 and 3 into one (`aire hook` engine + aire's own policy + `.claude/settings.json` wiring + dogfood land together); the audit harness check renumbers to sprint 3. No model change.
 - time: 2026-06-14 (v0.1.1)
 - summary: Resolves Open Design Question 1 (DEC-000023). Harness policy is declared in the repository's own `.aire/config.toml` `[harness]` section — per-repo and authoritative, required by DEC-000010's deterministic-audit constraint and consistent with the `[[coverage]]` precedent (DEC-000019); a single section rather than per-domain files; a `~/.aire` machine-level default/backstop cascade is deferred. Added the Location and scope subsection under Policy as Data, named the input file, and marked the open question resolved.
 - time: 2026-06-14 (v0.1.0)
