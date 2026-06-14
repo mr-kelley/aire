@@ -1,6 +1,6 @@
 ---
 title: Aire CLI Architecture Specification
-version: 0.1.2
+version: 0.1.3
 maintained_by: Aire System Architect (ASA)
 domain_tags: [tooling, cli, architecture]
 status: draft
@@ -56,7 +56,8 @@ tools/
     doctor.py          # `aire doctor`        (doctor-spec.md)
     history.py         # `aire history ...`   (history-spec.md)
     map.py             # `aire map ...`       (map-spec.md)
-    # audit.py, digest.py, hook.py            (future sprints)
+    audit.py           # `aire audit`         (audit-spec.md)
+    # digest.py, hook.py                      (future sprints)
 ```
 
 The console entry point `aire` maps to `aire.cli:console_main`; `python -m aire`
@@ -130,6 +131,8 @@ Tests follow the spec-to-test mapping in `claude/spec-spec.md`. Each subcommand'
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.1.3)
+- summary: Dispatch extended for `aire audit` (sprint 06): cli.py routes `audit`. Package layout adds audit.py (audit-spec.md). No change to the invocation contract or constraints.
 - time: 2026-06-13 (v0.1.2)
 - summary: Dispatch extended for `aire map` (sprint 05): cli.py routes `map check` / `map report`; config.py gains the `[[coverage]]` binding loader (DEC-000019). Package layout updated — map.py is implemented (map-spec.md); history.py is no longer "future". No change to the invocation contract or constraints.
 - time: 2026-06-13 (v0.1.1)
