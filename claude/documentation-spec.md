@@ -6,6 +6,8 @@ domain_tags: [system, governance, documentation]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "User-facing docs accompany user-visible features"
 ---
 
 # Purpose

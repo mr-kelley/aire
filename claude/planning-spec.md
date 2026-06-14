@@ -6,6 +6,8 @@ domain_tags: [system, governance, planning]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Work within the active sprint and milestone"
 ---
 
 # Purpose

@@ -1,0 +1,193 @@
+"""`aire digest` — the derived constraints digest.
+
+Governing spec: specs/tools/aire/digest-spec.md. The digest's governance role
+and the `digest:` declaration rule are owned by claude/spec-spec.md (Constraints
+Digest, Derived) and referenced, never restated.
+
+The constraints digest is a derived artifact: owning specs declare their
+digest-bound clauses in a `digest:` front-matter block; this module collects
+them and renders the canonical claude/constraints-digest.md. `render` emits it;
+`check` regenerates and compares against the committed file (fail closed).
+
+Read-only: emits to stdout; performs no writes and no network.
+"""
+
+from __future__ import annotations
+
+import difflib
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+from .doctor import find_git_root
+
+
+class DigestError(Exception):
+    """Misconfiguration that makes the digest underivable (fail closed, exit 2)."""
+
+
+# The derived artifact's repo-relative path — the output target, never a source.
+DIGEST_REL = "claude/constraints-digest.md"
+
+
+@dataclass
+class Clause:
+    """One digest clause, paired with the spec that declared it (the pointer)."""
+
+    spec: str   # repo-relative owning-spec path
+    text: str   # the one-clause rule summary
+
+
+# --- declaration parsing ------------------------------------------------------
+
+def _front_matter_digest(md_text: str) -> list:
+    """Extract the `digest:` block-list clauses from a markdown YAML header.
+
+    Raises DigestError if `digest:` carries an inline value rather than a
+    block-list (a malformed declaration; fail closed rather than guess).
+    """
+    lines = md_text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return []
+    end = None
+    for i in range(1, len(lines)):
+        if lines[i].strip() == "---":
+            end = i
+            break
+    if end is None:
+        return []
+    clauses: list = []
+    in_block = False
+    for line in lines[1:end]:
+        stripped = line.strip()
+        if not in_block:
+            if stripped == "digest:":
+                in_block = True
+            elif stripped.startswith("digest:"):
+                rest = stripped[len("digest:"):].strip()
+                if rest and not rest.startswith("#"):
+                    raise DigestError(
+                        "malformed digest: block (expected a block-list, got an inline value)"
+                    )
+                in_block = True
+            continue
+        if stripped.startswith("- "):
+            entry = stripped[2:].strip()
+            if len(entry) >= 2 and entry[0] in "\"'" and entry[-1] == entry[0]:
+                entry = entry[1:-1]
+            if entry:
+                clauses.append(entry)
+        elif not stripped:
+            continue
+        else:
+            break  # a new top-level key ends the digest block
+    return clauses
+
+
+def collect_clauses(root: Path) -> list:
+    """All declared `digest:` clauses across claude/ and specs/, ordered.
+
+    Deterministic order: owning spec path ascending, then declaration order
+    within the spec. An unreadable spec or a malformed `digest:` block fails
+    closed (DigestError) — the whole artifact is untrustworthy if a source
+    cannot be read.
+    """
+    found: list = []  # (spec_path, decl_index, text)
+    for base in ("claude", "specs"):
+        d = root / base
+        if not d.is_dir():
+            continue
+        for md in sorted(d.rglob("*.md")):
+            rel = str(md.relative_to(root))
+            if rel == DIGEST_REL:
+                continue
+            try:
+                text = md.read_text(encoding="utf-8")
+            except OSError as exc:
+                raise DigestError(f"cannot read spec {rel}: {exc}")
+            try:
+                clauses = _front_matter_digest(text)
+            except DigestError as exc:
+                raise DigestError(f"{rel}: {exc}")
+            for i, c in enumerate(clauses):
+                found.append((rel, i, c))
+    found.sort(key=lambda t: (t[0], t[1]))
+    return [Clause(spec=s, text=t) for s, _i, t in found]
+
+
+# --- canonical rendering ------------------------------------------------------
+
+# Generic scaffolding (the per-repo data is only the clauses). No timestamp,
+# so `render` is deterministic and `check` can compare byte-for-byte.
+_HEADER = """\
+---
+title: Constraints Digest
+maintained_by: Aire System Architect (ASA)
+domain_tags: [system, governance, digest]
+status: draft
+platform: claude-code
+license: Apache-2.0
+generated_by: aire digest
+---
+
+# Constraints Digest
+
+GENERATED — DO NOT EDIT. Derived from the `digest:` declarations in the owning
+specs by `aire digest render`. To change a line, edit the owning spec's
+`digest:` block and regenerate; `aire digest check` enforces that this file
+equals its regeneration (`claude/spec-spec.md`, Constraints Digest).
+"""
+
+_FOOTER = (
+    "<!-- generated by `aire digest`; do not hand-edit — "
+    "edit owning specs' digest: blocks -->"
+)
+
+
+def render_digest(clauses: list) -> str:
+    """The complete canonical constraints-digest.md text."""
+    body = "\n".join(f"- {c.text} — `{c.spec}`" for c in clauses)
+    parts = [_HEADER.rstrip("\n"), ""]
+    if body:
+        parts.append(body)
+        parts.append("")
+    parts.append(_FOOTER)
+    return "\n".join(parts) + "\n"
+
+
+def run_digest(action: str, repo_root=None, out=None) -> int:
+    out = out if out is not None else sys.stdout
+    start = Path(repo_root).resolve() if repo_root else Path.cwd()
+    root = find_git_root(start) or start
+    try:
+        clauses = collect_clauses(root)
+        rendered = render_digest(clauses)
+    except DigestError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    if action == "render":
+        out.write(rendered)
+        return 0
+    if action == "check":
+        target = root / DIGEST_REL
+        try:
+            committed = target.read_text(encoding="utf-8")
+        except OSError as exc:
+            print(f"error: cannot read {DIGEST_REL}: {exc}", file=sys.stderr)
+            return 2
+        if committed == rendered:
+            n = len(clauses)
+            out.write(f"digest: OK — {n} clause{'' if n == 1 else 's'}, "
+                      "committed file matches its regeneration\n")
+            return 0
+        out.write("digest: OUT OF DATE — committed file differs from its regeneration\n")
+        for line in difflib.unified_diff(
+            committed.splitlines(), rendered.splitlines(),
+            fromfile=f"{DIGEST_REL} (committed)", tofile="aire digest render",
+            lineterm="",
+        ):
+            out.write(line + "\n")
+        return 1
+    print("usage: aire digest {render|check}", file=sys.stderr)
+    return 2

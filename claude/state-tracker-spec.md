@@ -6,6 +6,8 @@ domain_tags: [system, governance, state]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Maintain STATE.md on meaningful state changes"
 ---
 
 # Purpose
