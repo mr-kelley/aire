@@ -1,6 +1,8 @@
 # Aire promotion gate (claude/claude.git-hygiene.md — Promotion Gate).
 # Prevention on PRs (tests required); detection on push to main (findings).
-# Zero dependencies — portable to Forgejo Actions with a self-hosted runner.
+# A promote/** tag push re-runs detection only, so a record landing clears a
+# real finding promptly (DEC-000022); tip-grace (DEC-000021) already greens the
+# routine merge-time run. Zero dependencies — portable to Forgejo Actions.
 name: aire-gate
 
 on:
@@ -8,6 +10,7 @@ on:
     branches: [main]
   push:
     branches: [main]
+    tags: ['promote/**']
 
 permissions:
   contents: read
@@ -24,10 +27,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # Tests + doctor on PRs and main pushes; skipped on promote/** tag pushes
+      # (they already ran on the PR and the main push that introduced the merge).
       - name: Unit tests (stdlib, zero deps)
+        if: github.ref_type != 'tag'
         run: python -m unittest discover -s tests/tools/aire -p "test_*.py"
       - name: aire doctor
+        if: github.ref_type != 'tag'
         run: PYTHONPATH=tools python -m aire doctor
+      # Detection on any push (main branch or a promote/** tag). On a tag push
+      # GITHUB_REF_NAME is the tag, which points at a main merge commit, so
+      # --first-parent walks main's history correctly.
       - name: aire history report — findings detection
         if: github.event_name == 'push'
         run: PYTHONPATH=tools python -m aire history report --ref "${GITHUB_REF_NAME}"
