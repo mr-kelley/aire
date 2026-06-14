@@ -6,6 +6,11 @@ domain_tags: [system, governance, git, hygiene]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Atomic commits, `type(scope): summary` format; commit before task switches"
+  - "Promote to main only with recorded test PASS (Profile B)"
+  - "Pushing is human-only; PR creation needs explicit per-case authorization"
+  - "Never delete branches without explicit user request"
 ---
 
 # Purpose

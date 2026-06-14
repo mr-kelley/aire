@@ -10,6 +10,7 @@ import sys
 
 from . import __version__
 from .audit import run_audit
+from .digest import run_digest
 from .doctor import run_doctor
 from .history import HistoryError, record as history_record
 from .history_report import run_report as history_report
@@ -38,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     aud = sub.add_parser("audit", help="governance liveness audit (mechanical checks)")
     aud.add_argument("--json", action="store_true", help="emit JSON")
+
+    dig = sub.add_parser("digest", help="derive the constraints digest from owning specs")
+    dsub = dig.add_subparsers(dest="digest_command", metavar="<action>")
+    dsub.add_parser("render", help="emit the canonical constraints digest")
+    dsub.add_parser("check", help="verify the committed digest matches its regeneration (gate)")
 
     history = sub.add_parser("history", help="promotion records")
     hsub = history.add_subparsers(dest="history_command", metavar="<action>")
@@ -84,6 +90,11 @@ def main(argv=None) -> int:
             return run_map("report", as_json=args.json)
     if args.command == "audit":
         return run_audit(as_json=args.json)
+    if args.command == "digest":
+        if args.digest_command is None:
+            print("usage: aire digest {render|check}", file=sys.stderr)
+            return 2
+        return run_digest(args.digest_command)
     if args.command == "history":
         if args.history_command is None:
             print("usage: aire history record [options]", file=sys.stderr)

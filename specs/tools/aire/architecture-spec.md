@@ -1,6 +1,6 @@
 ---
 title: Aire CLI Architecture Specification
-version: 0.1.3
+version: 0.1.4
 maintained_by: Aire System Architect (ASA)
 domain_tags: [tooling, cli, architecture]
 status: draft
@@ -57,7 +57,8 @@ tools/
     history.py         # `aire history ...`   (history-spec.md)
     map.py             # `aire map ...`       (map-spec.md)
     audit.py           # `aire audit`         (audit-spec.md)
-    # digest.py, hook.py                      (future sprints)
+    digest.py          # `aire digest ...`    (digest-spec.md)
+    # hook.py                                 (future sprint)
 ```
 
 The console entry point `aire` maps to `aire.cli:console_main`; `python -m aire`
@@ -131,6 +132,8 @@ Tests follow the spec-to-test mapping in `claude/spec-spec.md`. Each subcommand'
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.1.4)
+- summary: Dispatch extended for `aire digest` (sprint 07): cli.py routes `digest render` / `digest check`. Package layout adds digest.py (digest-spec.md); only hook.py remains future. No change to the invocation contract or constraints.
 - time: 2026-06-13 (v0.1.3)
 - summary: Dispatch extended for `aire audit` (sprint 06): cli.py routes `audit`. Package layout adds audit.py (audit-spec.md). No change to the invocation contract or constraints.
 - time: 2026-06-13 (v0.1.2)

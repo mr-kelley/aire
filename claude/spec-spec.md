@@ -1,11 +1,15 @@
 ---
 title: Specification Structure Standard
-version: 0.4.0
+version: 0.5.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, specs]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Spec-first: no implementation without a governing spec"
+  - "Every rule stated once in its owning spec; pointers elsewhere"
+  - "Tests are a completion requirement, never optional"
 ---
 
 # Purpose
@@ -67,7 +71,16 @@ Every normative rule in the governance set has exactly one **owning spec** — t
 - Duplicate statements of a rule are a governance defect: when two statements drift apart, readers cannot tell which is authoritative.
 - If a restatement and its owning spec disagree, the owning spec is authoritative; the restatement is corrected or removed.
 - Role generators (AireSmith) MUST produce pointer-style roles: generated roles cite owning specs rather than embedding rule text.
-- A compact, derived summary of active constraints (one clause + pointer per rule) is permitted as a session-start digest; it is regenerated or audited against owning specs whenever governance changes.
+- A compact summary of active constraints (one clause + pointer per rule) is maintained as a session-start digest. It is a **derived artifact**, not an authored one: it is regenerated from owning-spec declarations whenever governance changes (see Constraints Digest below).
+
+# Constraints Digest (Derived)
+
+The constraints digest (`claude/constraints-digest.md`) is the one-line-per-rule, session-start summary of active judgment-tier constraints. It is **derived**, not hand-maintained — a digest that is patched by hand drifts from its owning specs and rots silently (the failure DEC-000003 and the regenerate-not-patch principle exist to prevent).
+
+- **Declared, not inferred.** Each owning spec declares its digest-bound clauses in a `digest:` header field — a YAML block-list of one-clause rule summaries — in the same declared-not-inferred spirit as the `covers:` field. A clause is declared *beside* the rule it summarizes, so editing or removing the rule updates the declaration in the same edit. Rules are never extracted from prose heuristically.
+- **Derivation.** The digest is the ordered concatenation of every owning spec's `digest:` clauses, each paired with its owning spec path. Order is deterministic: spec path ascending, then declaration order within a spec.
+- **Authority is preserved.** The owning spec remains authoritative for the rule; the `digest:` clause is a downstream summary. A clause that disagrees with the rule it summarizes is a defect in the declaration, corrected at the spec.
+- **Mechanically enforced.** `aire digest render` produces the canonical digest; `aire digest check` regenerates and compares against the committed file, failing closed on any mismatch (per `specs/tools/aire/digest-spec.md`). The committed `claude/constraints-digest.md` MUST equal its regeneration. This makes "regenerate, don't patch" a gate rather than a hope.
 
 # Spec-to-Implementation Mapping
 
@@ -178,6 +191,9 @@ If a required behavior is missing from a spec, Claude MUST flag it and amend the
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.5.0)
+- summary: Implements DEC-000020. Added the Constraints Digest (Derived) section — the digest is a derived artifact, not hand-maintained: owning specs declare digest-bound clauses in a `digest:` header field (declared-not-inferred, like `covers:`); `aire digest render`/`check` regenerate and gate it fail-closed (specs/tools/aire/digest-spec.md). Reworded the Rule Ownership digest bullet to point at the new section. Cures the regenerate-not-patch dead-letter.
+
 - time: 2026-06-12
 - summary: Implements DEC-000006. Spec-to-implementation mapping defers to claude/coverage-spec.md: path-mirroring is no longer the universal rule; coverage is declared (role bindings + covers: fields) and mechanically verified, with granularity a per-project choice. Uncovered units remain forbidden.
 

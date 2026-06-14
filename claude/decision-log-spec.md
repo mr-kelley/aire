@@ -6,6 +6,8 @@ domain_tags: [system, governance, decisions]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Log Class B decisions; escalate Class C"
 ---
 
 # Purpose

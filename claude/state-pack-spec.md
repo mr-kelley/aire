@@ -6,6 +6,8 @@ domain_tags: [system, governance, state, context]
 status: draft
 platform: claude-code
 license: Apache-2.0
+digest:
+  - "Load session context static-first at session start"
 ---
 
 # Purpose

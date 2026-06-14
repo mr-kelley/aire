@@ -24,6 +24,10 @@ governance:
   planning-spec: <version>
   project-init-spec: <version>
   documentation-spec: <version>
+digest:
+  - "One deliverable at a time; complete or explicitly hand back"
+  - "Escalate ambiguity; never guess"
+  - "Implement the six relational primitives"
 ---
 
 # Purpose
