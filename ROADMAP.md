@@ -27,15 +27,17 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 ---
 
 ## Milestone: Harness Enforcement Layer
-**Status:** planned
+**Status:** active
 
 **Outcome:** Hard constraints (push policy, branch protection, scope boundaries, commit format) are enforced deterministically through permission rules and hooks rather than prose instructions. Project-specific policy lives in committed data files; enforcement logic lives in tested code. Prose governance is reserved for judgment calls.
 
-**Design notes (input, pre-spec):**
-- Classify each hard constraint by the **weakest permission mode it must survive**. The enforcement tiers are not equal under `--dangerously-skip-permissions` (bypass mode): prose does not survive it, and the server-side promotion gate (off-box, protects canonical history regardless of working-tree state) is the strongest tier. Pick the tier to match the constraint.
-- **Open empirical question, gates the spec:** does a PreToolUse hook still *block* under bypass mode? The Outcome above lists hooks as a deterministic mechanism, but current Claude Code docs are ambiguous (`bypassPermissions` skips *prompts*, yet a hook exit-2 blocks before permission rules are evaluated). Verify with a test before treating hooks as a bypass-surviving guard rather than an audit layer.
-- Harness policy (protected paths, egress allowlist, push posture) should be **committed, derivable data** — the coverage/digest declare-once-derive pattern extended to enforcement, so one source feeds both `aire audit` (verify) and any sandbox/permission config (enforce).
-- Closing this milestone's hook layer is what resolves the open layered-enforcement decision.
+**Governing spec:** [claude/harness-enforcement-spec.md](./claude/harness-enforcement-spec.md) (v0.1.0; sprint `harness-enforcement/01`) — formalizes the layered model (DEC-000001) and the enforcement-tier classification below.
+
+**Design notes:**
+- Classify each hard constraint by the **weakest run mode it must survive**, and place it at the lowest layer that can express it and survive that mode. The tiers are not equal under `--dangerously-skip-permissions` (bypass mode): prose and static permission rules do **not** survive it; **PreToolUse hooks do** (see next bullet); the server-side promotion gate (off-box, protects canonical history regardless of working-tree state) survives unconditionally.
+- **Resolved (2026-06-14):** does a PreToolUse hook still *block* under bypass mode? **Yes — verified empirically** (control + bypass + positive-control runs; a hook exiting 2 stopped the tool call identically with and without the flag). Layer 2 (hooks + policy data) is therefore a real deterministic guard, not an audit-only layer — it joins Layer 0 (tool/env) and the off-box gate in the bypass-surviving tier.
+- Harness policy (protected paths, push posture, egress allowlist) should be **committed, derivable data** — the coverage/digest declare-once-derive pattern extended to enforcement, so one source feeds both `aire audit` (verify) and the hook/permission config (enforce).
+- Closing this milestone's hook layer is what resolves the open layered-enforcement decision (DEC-000001).
 
 **Dependencies:** Governance Consolidation.
 
