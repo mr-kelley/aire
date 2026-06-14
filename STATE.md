@@ -6,7 +6,7 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 09 — CI re-trigger on promotion-tag push** — active on branch `work/2026-06-14T111144Z/ci-retrigger-on-promote-tag`. Companion to tip-grace (deferred from sprint 08): a `promote/**` tag push now triggers the gate, running only findings detection (tests/doctor skipped on tag runs), so a *real* forgotten-then-fixed finding clears promptly instead of lagging to the next main push. Recovery + confirmation polish, Profile A (CI-only); DEC-000022.
+- **Sprint 09 — CI re-trigger on promotion-tag push** — complete on branch `work/2026-06-14T111144Z/ci-retrigger-on-promote-tag`, PR in flight. Companion to tip-grace (deferred from sprint 08): a `promote/**` tag push now triggers the gate, running only findings detection (tests/doctor gated to `ref_type != 'tag'`), so a *real* forgotten-then-fixed finding clears promptly instead of lagging to the next main push. Recovery + confirmation polish, Profile A (CI-only, no record needed); DEC-000022. YAML validated; live observation on first promote-tag push post-merge.
 - **Aire CLI milestone — complete** (all subcommands shipped: doctor, history, map, audit, digest; PRs #12–#20; optional `hook` shim deferred).
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).

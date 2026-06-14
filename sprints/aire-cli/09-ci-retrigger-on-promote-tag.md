@@ -13,11 +13,11 @@ Close the companion gap to sprint 08's tip-grace (explicitly deferred there). Ti
 - `.github/workflows/ci.yml` — add `tags: ['promote/**']` to the push trigger; gate the Unit-tests and doctor steps to non-tag runs (`github.ref_type != 'tag'`); the history-report step already runs on any push and its `--ref "${GITHUB_REF_NAME}"` resolves correctly on a tag push (the tag points at a `main` merge commit, so `--first-parent` walks `main`).
 
 ## Acceptance Criteria
-- [ ] A `promote/**` tag push triggers the `aire-gate` workflow.
-- [ ] On a tag-triggered run, Unit tests and `aire doctor` are skipped; only findings detection runs.
-- [ ] On a main push, behavior is unchanged (tests + doctor + detection all run).
-- [ ] The change is Profile A (CI/config only; `.github/` is not a code path) — no promotion record required for this merge.
-- [ ] Workflow YAML is valid; reasoned through against GitHub Actions trigger/`ref_type` semantics (cannot be unit-tested locally).
+- [x] A `promote/**` tag push triggers the `aire-gate` workflow (`push.tags: ['promote/**']`).
+- [x] On a tag-triggered run, Unit tests and `aire doctor` are skipped (`if: github.ref_type != 'tag'`); only findings detection runs (`if: github.event_name == 'push'`).
+- [x] On a main push, behavior is unchanged (`ref_type == 'branch'` → tests + doctor + detection all run).
+- [x] The change is Profile A (CI/config only; `.github/` is not in `DEFAULT_CODE_PATHS`) — no promotion record required for this merge.
+- [x] Workflow YAML is valid (parsed; triggers and step conditions confirmed); reasoned through against GitHub Actions trigger/`ref_type` semantics. Live observation (a real promote-tag push triggering a detection-only run) confirmed on first use post-merge.
 
 ## Honest scoping
 - This is **recovery + confirmation polish**, not a fix: after tip-grace, the normal flow is already green at merge time. The re-trigger matters only when a real finding exists and you push the missing record, or to flip CI status from `pending` to `recorded`.
