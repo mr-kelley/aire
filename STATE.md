@@ -45,14 +45,16 @@ Decision log: `claude/decisions/events/` (DEC-000001…DEC-000022, private). Loa
 - DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
 - DEC-000020: the constraints digest is a derived artifact — owning specs declare `digest:` clauses; `aire digest` re-derives and gates fail-closed (declared-not-inferred, like `covers:`).
 - DEC-000021: promotion tip-grace — the newest first-parent merge is record-pending by construction (not a finding); older recordless code merges remain findings. Removes the merge-time false failure without suppression.
+- DEC-000022: a `promote/**` tag push re-runs findings detection only (tests/doctor skipped on tag runs); clears a real forgotten-then-fixed finding promptly. Companion to DEC-000021.
 - DEC-000013: private role masters versioned in a dedicated repository; pilot-first migration.
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 
 ## Open Questions
-- **DEC-000018 (provisional closeout convention)** under evaluation: does folding sprint closeout into the next sprint's opening commit hold up over a few sprints? Four data points now: sprint 03 folded, sprint 04 bundled (standalone doc PR), sprint 05 folded, sprint 06 folded (into this sprint-07 opening). Pattern emerging — fold when the next sprint carries content, bundle when a standalone doc change needs its own PR. One or two more, then declare a manual PASS/FAIL.
 - Does this repo get its own AireSmith-generated maintainer role, or continue as operator-paired sessions? (Affects root CLAUDE.md generation; does not block CLI work. See `sprints/aire-cli/01-project-init.md`.)
 - Pilot-role observations — any v0.4.0 structure friction feeds back before bulk migration.
-- First liveness-audit run (manual, per `claude/audit-spec.md`) — schedule after init completes.
+- **Judgment-walk audit** (the non-mechanical half of `claude/audit-spec.md`: exercised / agreement / necessity) — the mechanical half now runs every gate via `aire audit`; schedule a periodic manual judgment walk when convenient. `aire audit` currently flags candidate decisions with `outcome.status: unknown` for closure review.
+
+*Resolved:* DEC-000018 closeout convention — **PASS** after seven clean applications (folded 03/05/06/07/08, bundled 04/09); ratified into `claude/planning-spec.md` v0.2.0 (2026-06-14).
 
 ## Session Notes
 2026-06-12: Marathon governance-modernization session. Thirteen decisions logged; PRs #5–#9 merged; publication boundary made mechanical; private role masters versioned; migration pilot complete. This file created during the project-init sprint. Next: NORTHSTAR approval → CLI bootstrap sprint (tools/, Profile B).
