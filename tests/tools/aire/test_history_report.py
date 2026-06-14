@@ -50,9 +50,20 @@ def make_history_repo(d, with_finding=True):
     # 2. docs-only recordless merge (expected, not a finding)
     _merge_branch(d, "docs-only", "docs/y.md", "doc\n", "Merge docs-only")
 
-    # 3. code-changing recordless merge (the finding)
+    # 3. code-changing recordless merge (the finding) — capped by a later docs
+    #    merge so it is NOT the newest first-parent merge (tip-grace would
+    #    otherwise classify the tip as record-pending, not a finding).
     if with_finding:
         _merge_branch(d, "feat-untracked", "tools/z.py", "print('z')\n", "Merge feat-untracked")
+        _merge_branch(d, "docs-cap", "docs/cap.md", "cap\n", "Merge docs-cap")
+    return d
+
+
+def _init_repo(d):
+    _run(["git", "init", "-b", "main", "-q"], d)
+    _run(["git", "config", "user.email", "t@example.com"], d)
+    _run(["git", "config", "user.name", "Test"], d)
+    _commit_file(d, "README.md", "x", "init")
     return d
 
 
@@ -77,6 +88,62 @@ class TestSummary(unittest.TestCase):
             self.assertEqual(rc, 0)
             self.assertIn("findings): 0", out.getvalue())
             self.assertIn("OK", out.getvalue())
+
+
+class TestTipGrace(unittest.TestCase):
+    """DEC-000021: the newest first-parent merge is record-pending by
+    construction, not a finding; older recordless code merges are real drift."""
+
+    def test_tip_recordless_code_is_pending_not_finding(self):
+        with tempfile.TemporaryDirectory() as d:
+            _init_repo(d)
+            _merge_branch(d, "feat", "tools/a.py", "x\n", "Merge feat")  # tip, recordless code
+            out = io.StringIO()
+            rc = run_report(view="summary", ref="main", cwd=d, out=out)
+            s = out.getvalue()
+            self.assertEqual(rc, 0)                # pending never fails the report
+            self.assertIn("findings): 0", s)
+            self.assertIn("Record-pending", s)
+            self.assertIn("Merge feat", s)
+
+    def test_older_recordless_code_is_finding(self):
+        with tempfile.TemporaryDirectory() as d:
+            _init_repo(d)
+            _merge_branch(d, "feat", "tools/a.py", "x\n", "Merge feat")      # becomes older
+            _merge_branch(d, "docs", "docs/y.md", "d\n", "Merge docs-cap")   # tip = docs (no record expected)
+            out = io.StringIO()
+            rc = run_report(view="summary", ref="main", cwd=d, out=out)
+            s = out.getvalue()
+            self.assertEqual(rc, 1)                # the older code merge is a finding
+            self.assertIn("findings): 1", s)
+            self.assertIn("Merge feat", s)
+
+    def test_pending_and_finding_coexist(self):
+        with tempfile.TemporaryDirectory() as d:
+            _init_repo(d)
+            _merge_branch(d, "feat1", "tools/a.py", "x\n", "Merge feat1")  # older code -> finding
+            _merge_branch(d, "feat2", "tools/b.py", "y\n", "Merge feat2")  # tip code -> pending
+            out = io.StringIO()
+            rc = run_report(view="summary", ref="main", cwd=d, out=out)
+            s = out.getvalue()
+            self.assertEqual(rc, 1)                # a real finding still fails despite a pending tip
+            self.assertIn("findings): 1", s)
+            self.assertIn("Record-pending", s)
+            self.assertIn("Merge feat1", s)        # older = finding
+            self.assertIn("Merge feat2", s)        # tip = pending
+
+    def test_tip_with_record_is_neither(self):
+        with tempfile.TemporaryDirectory() as d:
+            _init_repo(d)
+            commit = _merge_branch(d, "feat", "tools/a.py", "x\n", "Merge feat")
+            payload = json.dumps({"tests": {"outcome": "PASS", "sha": commit}}, sort_keys=True)
+            _run(["git", "tag", "-a", "promote/feat", commit, "-F", "-"], d, stdin=payload)
+            out = io.StringIO()
+            rc = run_report(view="summary", ref="main", cwd=d, out=out)
+            s = out.getvalue()
+            self.assertEqual(rc, 0)
+            self.assertIn("findings): 0", s)
+            self.assertNotIn("Record-pending", s)  # recorded tip is accounted for, not pending
 
 
 class TestDetailAndChain(unittest.TestCase):
