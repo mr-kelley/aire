@@ -12,6 +12,7 @@ from . import __version__
 from .doctor import run_doctor
 from .history import HistoryError, record as history_record
 from .history_report import run_report as history_report
+from .map import run_map
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -27,6 +28,12 @@ def build_parser() -> argparse.ArgumentParser:
         "doctor", help="validate repository and environment (read-only)"
     )
     doctor.add_argument("--json", action="store_true", help="emit JSON")
+
+    mp = sub.add_parser("map", help="spec coverage mapping")
+    msub = mp.add_subparsers(dest="map_command", metavar="<action>")
+    msub.add_parser("check", help="verify coverage (gate; exit 1 on findings)")
+    mrep = msub.add_parser("report", help="emit the coverage map")
+    mrep.add_argument("--json", action="store_true", help="emit JSON")
 
     history = sub.add_parser("history", help="promotion records")
     hsub = history.add_subparsers(dest="history_command", metavar="<action>")
@@ -63,6 +70,14 @@ def main(argv=None) -> int:
         return 0
     if args.command == "doctor":
         return run_doctor(as_json=args.json)
+    if args.command == "map":
+        if args.map_command is None:
+            print("usage: aire map {check|report}", file=sys.stderr)
+            return 2
+        if args.map_command == "check":
+            return run_map("check")
+        if args.map_command == "report":
+            return run_map("report", as_json=args.json)
     if args.command == "history":
         if args.history_command is None:
             print("usage: aire history record [options]", file=sys.stderr)

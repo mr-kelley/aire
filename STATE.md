@@ -6,7 +6,8 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- No active development sprint. **Gate-Enforced Promotion milestone is complete** (CI gate verified on both halves — PR #16 blocked, detection caught a real finding). Finalization PR in flight. Next: continue the Aire CLI milestone (`aire map` / coverage — with the binding-location question — then `aire audit`, `aire digest`), or pivot to the Harness Enforcement Layer (local Claude Code hooks).
+- **Sprint 05 — `aire map` (coverage)** — complete on branch `work/2026-06-14T011333Z/aire-map-coverage`, PR in flight. The `code` engine maps spec coverage (NORTHSTAR criterion 4); dogfooded green on aire (46/46 `tools/aire/` units covered). Resolved the deferred binding-location question via DEC-000019 (`.aire/config.toml` `[[coverage]]`). 56 tests green. Next in the Aire CLI milestone: `aire audit` (liveness), then `aire digest`.
+- **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions

@@ -1,6 +1,6 @@
 ---
 title: Coverage Contract Specification
-version: 0.1.0
+version: 0.2.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, coverage, mapping, tooling]
 status: draft
@@ -57,6 +57,26 @@ coverage_config:
 ```
 
 AireSmith embeds the declaration at generation time, derived from the role's domain.
+
+## Repo-Level Binding (Role-less Repos)
+
+A role declares the coverage of the units *it* produces. But a repository may have no role — operated as paired human+assistant sessions, or governed before any role is generated — or may contain source domains that no role claims. Such a repo still needs to declare what the mapper covers.
+
+For these cases the binding has a second home: an array of tables `[[coverage]]` in `.aire/config.toml` (the per-repo data file named in the Aire CLI architecture spec). Each entry mirrors the role-header binding:
+
+```toml
+# .aire/config.toml
+[[coverage]]
+model = "code"            # code | artifact | advisory | none
+paths = ["tools/aire/"]   # code model; globs=/joins=/justification= per the other models
+```
+
+**Resolution order (Normative).** The mapper assembles its bindings from two sources, in this fixed precedence:
+
+1. **Role headers first.** Where roles exist, each role owns the coverage of its declared units; its `coverage_model`/`coverage_config` binds those paths.
+2. **`.aire/config.toml` `[[coverage]]` second.** Any domain a repo declares directly, for regions no role claims.
+
+This ordering keeps the role the *primary* home and makes adding a role later non-breaking: a new role simply claims a domain the config block currently covers, and the role's binding takes precedence. A binding from either source carries identical semantics through the rest of this contract (units, `covers:` cross-reference, exit codes, conflict detection). (Per DEC-000019.)
 
 # Spec-Side Declarations
 
@@ -118,5 +138,7 @@ This spec defines testable behavior implemented by the Aire CLI. Tests live in t
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.2.0)
+- summary: Added the Repo-Level Binding subsection (DEC-000019): role-less repos (and unclaimed source domains) declare coverage bindings in `.aire/config.toml` `[[coverage]]`, with a normative resolution order — role headers first, config block second. Unblocks `aire map` on role-less repos (including aire itself) without coupling to the open 'repo gets a role?' question; non-breaking when a role is later added.
 - time: 2026-06-12
 - summary: Initial coverage contract per DEC-000006. Replaces universal spec-per-file path-mirroring with declared bindings (code/artifact/advisory/none), spec-side covers: declarations, a normative mapper interface, and the shared-library contribution rule. Ancestor: the CoretexGrid-era AST function-index script.

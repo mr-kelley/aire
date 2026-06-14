@@ -2,3 +2,10 @@
 aire_version_min = "0.1.0"
 profile = "B"
 # local_model_floor: unset until measured/decided (DEC-000014).
+
+# Repo-level coverage binding (DEC-000019): aire is role-less, so it declares
+# what `aire map` covers here rather than in a role header. The CLI source is
+# the code domain; its specs live in specs/tools/aire/ with covers: fields.
+[[coverage]]
+model = "code"
+paths = ["tools/aire/"]

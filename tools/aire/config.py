@@ -7,8 +7,47 @@ Reads .aire/config.toml via stdlib tomllib. No external dependencies.
 from __future__ import annotations
 
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+
+def _str_list(value) -> list[str]:
+    """Coerce a TOML value into a list of strings; non-lists yield []."""
+    if isinstance(value, list):
+        return [str(v) for v in value]
+    return []
+
+
+def _parse_coverage(data: dict) -> list[CoverageBinding]:
+    """Parse the `[[coverage]]` array of tables into bindings (DEC-000019)."""
+    bindings: list[CoverageBinding] = []
+    for entry in data.get("coverage", []):
+        if not isinstance(entry, dict):
+            continue
+        just = entry.get("justification")
+        bindings.append(CoverageBinding(
+            model=str(entry.get("model", "")),
+            paths=_str_list(entry.get("paths")),
+            globs=_str_list(entry.get("globs")),
+            joins=_str_list(entry.get("joins")),
+            justification=str(just) if isinstance(just, str) else None,
+        ))
+    return bindings
+
+
+@dataclass
+class CoverageBinding:
+    """One repo-level coverage binding from `[[coverage]]` (DEC-000019).
+
+    Mirrors a role-header binding (claude/coverage-spec.md): a model plus the
+    model-appropriate configuration.
+    """
+
+    model: str
+    paths: list[str]
+    globs: list[str]
+    joins: list[str]
+    justification: str | None = None
 
 
 @dataclass
@@ -18,6 +57,7 @@ class Config:
     aire_version_min: str | None = None
     profile: str | None = None
     local_model_floor: int | None = None
+    coverage: list[CoverageBinding] = field(default_factory=list)
     present: bool = False          # the file existed
     parse_error: str | None = None  # set if it existed but failed to parse
 
@@ -37,6 +77,7 @@ def load_config(root: Path) -> Config:
         aire_version_min=data.get("aire_version_min"),
         profile=data.get("profile"),
         local_model_floor=int(floor) if isinstance(floor, int) else None,
+        coverage=_parse_coverage(data),
         present=True,
     )
 
