@@ -1,6 +1,6 @@
 ---
 title: Harness Enforcement Specification
-version: 0.1.0
+version: 0.1.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, enforcement, hooks]
 status: draft
@@ -67,10 +67,15 @@ Enforcement separates **logic** (code) from **policy** (data):
 - **Policy is committed data.** What a repo enforces — push posture / remote classification, protected paths, commit-format rule, etc. — lives in committed, diffable, machine-readable policy files. Changing policy is a one-line data diff, not a code or spec edit.
 - **One source, two consumers (declare once, derive).** The same committed policy feeds **enforcement** (the hook/permission config that blocks) and **verification** (`aire audit`, which confirms the declared policy is actually wired in). This is the coverage/digest declare-once-derive pattern (DEC-000019/DEC-000020) extended to enforcement: policy is declared once and both the enforcer and the auditor derive from it.
 
-The concrete file layout (a single `.aire/config.toml` section vs per-domain files such as `.claude/remote-policy.json`) is **deferred to the implementation spec** — see Open Design Questions.
+## Location and scope
+Policy is declared in the **repository's own `.aire/config.toml`**, in a new `[harness]` section — the same per-repo, already-audited home as the `[[coverage]]` bindings (DEC-000019). This is **required, not merely preferred**: DEC-000010 makes the binary generic with per-repo data and `aire audit` stateless and deterministic. Policy in a machine-level location would make a repo's audit result depend on host state *outside* the repo — the same commit would audit differently across machines and in CI, and the policy would not be versioned or diffable with the code it governs. The authoritative, audited policy therefore travels with the repo.
+
+A machine-level `~/.aire/config.toml` MAY later serve as an optional **default/backstop** cascade — host facts shared across repos (e.g. which remote hosts are public), or a fail-safe for repos that declare no policy — with **project config overriding user defaults**. It is additive, is **never the audited source of truth**, and is **deferred**: not part of this milestone.
+
+The exact `[harness]` field schema is owned by the implementation spec (`specs/tools/aire/…`), not this document. What is fixed here is the **location** (`.aire/config.toml`), the **single `[harness]` section** (not scattered per-domain files such as the `.claude/remote-policy.json` DEC-000001 sketched), and the **per-repo authority**.
 
 # Inputs
-- **Committed policy-data file(s)** declaring the repo's hard constraints (format owned by the implementation spec).
+- **The repository's `.aire/config.toml` `[harness]` section** declaring the repo's hard constraints (field schema owned by the implementation spec; location and per-repo authority fixed by this spec — see Policy as Data → Location and scope).
 - **`.claude/settings.json`** — Layer 1 permission rules and Layer 2 hook registration.
 - **Git remote configuration** — for Layer 0 push-URL classification.
 - **The governance spec set** — each hard constraint's intent statement, owned by its spec; this spec enforces, it does not author the rules.
@@ -138,7 +143,7 @@ Drawn from DEC-000001 and the milestone decomposition:
 # Open Design Questions
 *(For operator decision before the implementation sprints — surfaced here rather than silently chosen.)*
 
-1. **Policy-data layout.** One `.aire/config.toml` `[harness]` section (favored by declare-once-derive — a single source) vs per-domain files such as `.claude/remote-policy.json` (named in DEC-000001). Decide before Sprint 2.
+1. **Policy-data layout — Resolved (2026-06-14, DEC-000023).** The repo's own `.aire/config.toml`, single `[harness]` section — per-repo and authoritative (required by DEC-000010's deterministic-audit constraint), consistent with the `[[coverage]]` precedent (DEC-000019). A `~/.aire` machine-level default/backstop cascade is deferred. The one remaining detail — the exact `[harness]` field schema — is owned by the Sprint 2 implementation spec, not a governance-level open question. See Policy as Data → Location and scope.
 2. **Hook-integrity scope.** Protect the hook config/scripts/policy as protected paths (who-guards-the-guards) — accepting it is mistake-proofing within the cooperative threat model, not an adversarial guarantee — or rely on the off-box gate plus containment for that residual?
 3. **Constraint migration order.** Which hard constraints move from prose to hooks first? Push posture is the obvious first; commit format, protected-path writes, and working-tree-clean / `STATE.md` freshness follow.
 4. **Stop-hook scope.** DEC-000001 named a `Stop` hook for working-tree-clean / `STATE.md` freshness. Include it in this milestone or defer?
@@ -148,5 +153,7 @@ Drawn from DEC-000001 and the milestone decomposition:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.1.1)
+- summary: Resolves Open Design Question 1 (DEC-000023). Harness policy is declared in the repository's own `.aire/config.toml` `[harness]` section — per-repo and authoritative, required by DEC-000010's deterministic-audit constraint and consistent with the `[[coverage]]` precedent (DEC-000019); a single section rather than per-domain files; a `~/.aire` machine-level default/backstop cascade is deferred. Added the Location and scope subsection under Policy as Data, named the input file, and marked the open question resolved.
 - time: 2026-06-14 (v0.1.0)
 - summary: Initial spec. Formalizes DEC-000001 (layered harness enforcement) as a governing spec: the Layer 0–3 ladder plus the off-box gate, the bypass-mode survivability classification, the placement rule, the policy-as-data / declare-once-derive convention, and the `aire audit` verification contract. Incorporates the 2026-06-14 empirical finding that PreToolUse hooks block under `--dangerously-skip-permissions` (Layer 2 is a deterministic guard, not audit-only). Concrete file formats and enforcing code are deferred to forthcoming implementation specs under `specs/tools/aire/`.

@@ -41,10 +41,11 @@ Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: P
 - `private/` — personal/legacy working files, never published.
 
 ## Key Decisions
-Decision log: `claude/decisions/events/` (DEC-000001…DEC-000022, private). Load-bearing for current work:
+Decision log: `claude/decisions/events/` (DEC-000001…DEC-000023, private). Load-bearing for current work:
 - DEC-000010: single system-installed CLI; binaries are never orchestrators; no daemons.
 - DEC-000006/000008: coverage contract + version pinning (mechanism live; 27 role migrations pending pilot).
 - DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
+- DEC-000023: harness policy is declared per-repo in `.aire/config.toml` `[harness]` — authoritative and audited (required by DEC-000010 determinism; extends DEC-000019's per-repo `.aire` home); `~/.aire` machine-level cascade deferred. Resolves harness-spec Open Question 1.
 - DEC-000020: the constraints digest is a derived artifact — owning specs declare `digest:` clauses; `aire digest` re-derives and gates fail-closed (declared-not-inferred, like `covers:`).
 - DEC-000021: promotion tip-grace — the newest first-parent merge is record-pending by construction (not a finding); older recordless code merges remain findings. Removes the merge-time false failure without suppression.
 - DEC-000022: a `promote/**` tag push re-runs findings detection only (tests/doctor skipped on tag runs); clears a real forgotten-then-fixed finding promptly. Companion to DEC-000021.
