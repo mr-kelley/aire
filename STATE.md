@@ -6,11 +6,13 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 07 — `aire digest` (constraints)** — complete on branch `work/2026-06-14T095926Z/aire-digest-constraints`, PR in flight. Makes `claude/constraints-digest.md` a derived artifact: owning specs declare digest-bound clauses in a `digest:` header block (declared-not-inferred, like `covers:`); `digest render` re-derives, `digest check` regenerates + diffs fail-closed (DEC-000020). Cures the regenerate-not-patch dead-letter from the governance-drift investigation. Dogfooded on aire: digest check 0 (15 clauses), audit 0 defect, map 58/58, doctor 6 ok/1 warn; 104 tests green. **This closes the Aire CLI milestone** (all subcommands shipped; only the optional `hook` shim remains deferred).
+- **Sprint 08 — promotion tip-grace** — complete on branch `work/2026-06-14T104042Z/promotion-tip-grace`, PR in flight. Real-use refinement: `history report` raised a false failure in the unavoidable window between a code merge landing and its promotion record being pushed (detection runs at merge time, before the tag exists). Fix differentiates real-from-false in code, not by suppression — the newest first-parent merge, if a recordless code merge, classifies as `pending` (exit 0); older recordless code merges stay findings (exit 1). A forgotten record is still caught, one merge later (DEC-000021). Audit check #7 inherits the grace. 108 tests green; promotion-record-spec v0.4.0. Self-validating: this PR's own merge becomes the recordless tip → its merged code classifies it `pending` → green. Deferred: optional CI re-trigger on `promote/**` tag push (clears a finding's green immediately instead of at next main push).
+- **Aire CLI milestone — complete** (all subcommands shipped: doctor, history, map, audit, digest; PRs #12–#20; optional `hook` shim deferred).
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- Aire CLI: `aire digest` — derived constraints digest (owning specs declare `digest:` clauses; render/check, fail-closed; cures regenerate-not-patch, DEC-000020); dogfooded 15 clauses match, audit 0 defect; 104 tests green; promotion record `promote/aire-digest-constraints` — PR #20 — 2026-06-14. **Closed the Aire CLI milestone.**
 - Aire CLI: `aire audit` — mechanical governance liveness (nine DEC-000004 checks; #1 reuses `map`, #7 reuses `history report`); dogfooded 0 defect on aire (4 candidate, 2 n/a); 86 tests green; promotion record `promote/aire-audit-liveness` — PR #19 — 2026-06-14.
 - Aire CLI: `aire map` — mechanical spec coverage (code engine, AST + `covers:` cross-reference); dogfooded 46/46 units green on aire; role-less binding home `.aire/config.toml` `[[coverage]]` (DEC-000019); 56 tests green; promotion record `promote/aire-map-coverage` — PR #18 — 2026-06-14.
 - **Gate-Enforced Promotion milestone complete**: CI promotion gate (GitHub Actions, required `tests` check + push-to-main findings detection), verified on both halves — PR #15 — 2026-06-13.
@@ -35,11 +37,12 @@ Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: P
 - `private/` — personal/legacy working files, never published.
 
 ## Key Decisions
-Decision log: `claude/decisions/events/` (DEC-000001…DEC-000020, private). Load-bearing for current work:
+Decision log: `claude/decisions/events/` (DEC-000001…DEC-000021, private). Load-bearing for current work:
 - DEC-000010: single system-installed CLI; binaries are never orchestrators; no daemons.
 - DEC-000006/000008: coverage contract + version pinning (mechanism live; 27 role migrations pending pilot).
 - DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
 - DEC-000020: the constraints digest is a derived artifact — owning specs declare `digest:` clauses; `aire digest` re-derives and gates fail-closed (declared-not-inferred, like `covers:`).
+- DEC-000021: promotion tip-grace — the newest first-parent merge is record-pending by construction (not a finding); older recordless code merges remain findings. Removes the merge-time false failure without suppression.
 - DEC-000013: private role masters versioned in a dedicated repository; pilot-first migration.
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 

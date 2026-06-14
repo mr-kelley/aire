@@ -1,6 +1,6 @@
 ---
 title: Promotion Record Specification
-version: 0.3.0
+version: 0.4.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, promotion, audit]
 status: draft
@@ -69,6 +69,7 @@ Rules:
 - Reports are **derived artifacts**: regenerated from canonical state (git + tags + sprint files + decision events) on demand; never hand-edited; deterministic output (stable ordering by promotion date — the tagged commit's committer date — then tag name). Dates shown are canonical git commit dates, never the report's generation time.
 - **Recordless-merge classification.** A first-parent merge into `main` without a promotion record MUST be surfaced, never silently skipped — but classified, so the report is honest rather than alarmist:
   - A recordless merge that changed **code paths** (default `tools/`, `src/`, `tests/`; project-configurable) is a **finding** — code reached `main` without a tested promotion record. The summary's strong claim is "zero code merges without a test record"; findings are surfaced prominently.
+  - **Tip-grace (record-pending).** The single newest first-parent merge on the analyzed ref is an exception: a promotion record certifies the merge commit and so cannot exist until *after* the merge, which means the newest merge is always momentarily recordless by construction. If that newest merge is a recordless code merge it is classified **`pending`** — record-pending, listed informationally, **not** a finding and **not** failing the report (exit 0). This is the only graced position. A recordless code merge that is *not* the newest first-parent merge (a later merge sits above it) stays a **finding**: that is a record forgotten and moved past, genuine drift. Detection of a forgotten record therefore lags by exactly one merge — it fires once the merge is no longer the tip. This is a real-versus-false distinction in the classifier, not suppression: every genuinely recordless code merge is still caught (DEC-000021).
   - A recordless merge that touched only docs/governance paths is **expected** (Profile A bookkeeping) and listed as informational, not a finding.
 - Decision titles in the detail/chain views are joined **best-effort** from the local decision log; when a referenced decision is not locally present (e.g., a public clone where the log is gitignored), the report shows the decision ID alone and never fails.
 - The generator reads repo state only: no network, no writes beyond the report files.
@@ -99,6 +100,8 @@ Implemented and tested in the Aire CLI project. Tests MUST verify: payload parse
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.4.0)
+- summary: Implements DEC-000021 (sprint 08). Added tip-grace to recordless-merge classification: the newest first-parent merge, when a recordless code merge, is `pending` (record-pending by construction, exit 0), not a finding; older recordless code merges remain findings. Removes the false failure in the window between a code merge and its promotion record, without suppressing genuine drift — caught one merge later. audit check #7 inherits via the shared classifier.
 - time: 2026-06-13 (v0.3.0)
 - summary: Report-generator refinements for the `aire history report` implementation (sprint 03). Recordless first-parent merges are classified — code-path-changing merges are findings, docs-only merges are expected (Profile A) — so the report is honest, not alarmist. Decision-title joins are best-effort against the private log (degrade to ID-only). Clarified that shown dates are canonical commit dates, not generation time.
 - time: 2026-06-13 (v0.2.0)

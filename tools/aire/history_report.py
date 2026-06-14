@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from .history import HistoryError, _git
@@ -40,9 +40,10 @@ class Merge:
 @dataclass
 class History:
     promotions: list
-    findings: list      # recordless merges that changed code paths
-    docs_merges: list   # recordless merges that did not (expected, Profile A)
+    findings: list      # recordless code merges that are NOT the tip (real drift)
+    docs_merges: list   # recordless merges that touched only docs (expected, Profile A)
     span: tuple
+    pending: list = field(default_factory=list)  # newest merge, recordless code — record-pending (DEC-000021)
 
 
 # --- gathering ---------------------------------------------------------------
@@ -96,22 +97,32 @@ def gather(ref="main", code_paths=DEFAULT_CODE_PATHS, cwd=None):
 
     out = _git(["log", "--merges", "--first-parent", ref, "--format=%H%x1f%ct%x1f%s"],
                cwd=cwd, check=False)
-    findings, docs = [], []
-    for line in (ln for ln in out.splitlines() if ln.strip()):
+    findings, docs, pending = [], [], []
+    # Merges are listed newest-first; idx == 0 is the tip (newest first-parent
+    # merge). A recordless code merge AT the tip is record-pending by
+    # construction (its tag cannot pre-exist the merge it certifies), so it is
+    # graced; the same merge older than the tip is real drift (DEC-000021).
+    for idx, line in enumerate(ln for ln in out.splitlines() if ln.strip()):
         h, ct, subj = line.split("\x1f", 2)
         prom = by_commit.get(h)
         if prom is not None:
             continue
         changed = _merge_changed_code(h, code_paths, cwd=cwd)
         merge = Merge(h, subj, _fmt_date(ct), None, changed)
-        (findings if changed else docs).append(merge)
+        if not changed:
+            docs.append(merge)
+        elif idx == 0:
+            pending.append(merge)
+        else:
+            findings.append(merge)
 
     dates = sorted(
         d for d in ([p.date for p in proms]
-                    + [m.date for m in findings + docs]) if d != "unknown"
+                    + [m.date for m in findings + docs + pending]) if d != "unknown"
     )
     span = (dates[0], dates[-1]) if dates else (None, None)
-    return History(promotions=proms, findings=findings, docs_merges=docs, span=span)
+    return History(promotions=proms, findings=findings, docs_merges=docs,
+                   span=span, pending=pending)
 
 
 # --- joins (best-effort, against local canonical state) ----------------------
@@ -160,9 +171,16 @@ def _render_summary(h, cwd, out):
         out.write(f"Span: {h.span[0]} .. {h.span[1]}\n\n")
     out.write(f"- Tested promotions: {len(h.promotions)}\n")
     out.write(f"- Docs/governance merges (no record expected): {len(h.docs_merges)}\n")
-    out.write(f"- Code merges without a test record (findings): {len(h.findings)}\n\n")
+    out.write(f"- Code merges without a test record (findings): {len(h.findings)}\n")
+    if h.pending:
+        out.write(f"- Record-pending (newest merge, tag not yet pushed): {len(h.pending)}\n")
+    out.write("\n")
     if not h.findings:
-        out.write("OK  Every code merge into main carries a tested promotion record.\n")
+        if h.pending:
+            out.write("OK  Every settled code merge carries a tested promotion record; "
+                      "the newest merge is record-pending (tag expected next).\n")
+        else:
+            out.write("OK  Every code merge into main carries a tested promotion record.\n")
     else:
         out.write(f"XX  {len(h.findings)} code merge(s) reached main without a record — see Findings.\n")
     if h.promotions:
@@ -174,6 +192,10 @@ def _render_summary(h, cwd, out):
     if h.findings:
         out.write("\n## Findings — code merges without a record\n")
         for m in h.findings:
+            out.write(f"- {m.date}  {m.commit[:9]}  {m.subject}\n")
+    if h.pending:
+        out.write("\n## Record-pending — newest merge, tag expected next\n")
+        for m in h.pending:
             out.write(f"- {m.date}  {m.commit[:9]}  {m.subject}\n")
 
 
@@ -230,6 +252,7 @@ def to_json(h):
             "tested_promotions": len(h.promotions),
             "docs_merges": len(h.docs_merges),
             "findings": len(h.findings),
+            "pending": len(h.pending),
         },
         "promotions": [
             {"tag": p.tag, "commit": p.commit, "date": p.date, "payload": p.payload}
@@ -238,6 +261,10 @@ def to_json(h):
         "findings": [
             {"commit": m.commit, "date": m.date, "subject": m.subject}
             for m in h.findings
+        ],
+        "pending": [
+            {"commit": m.commit, "date": m.date, "subject": m.subject}
+            for m in h.pending
         ],
     }
 
