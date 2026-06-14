@@ -31,6 +31,12 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 
 **Outcome:** Hard constraints (push policy, branch protection, scope boundaries, commit format) are enforced deterministically through permission rules and hooks rather than prose instructions. Project-specific policy lives in committed data files; enforcement logic lives in tested code. Prose governance is reserved for judgment calls.
 
+**Design notes (input, pre-spec):**
+- Classify each hard constraint by the **weakest permission mode it must survive**. The enforcement tiers are not equal under `--dangerously-skip-permissions` (bypass mode): prose does not survive it, and the server-side promotion gate (off-box, protects canonical history regardless of working-tree state) is the strongest tier. Pick the tier to match the constraint.
+- **Open empirical question, gates the spec:** does a PreToolUse hook still *block* under bypass mode? The Outcome above lists hooks as a deterministic mechanism, but current Claude Code docs are ambiguous (`bypassPermissions` skips *prompts*, yet a hook exit-2 blocks before permission rules are evaluated). Verify with a test before treating hooks as a bypass-surviving guard rather than an audit layer.
+- Harness policy (protected paths, egress allowlist, push posture) should be **committed, derivable data** — the coverage/digest declare-once-derive pattern extended to enforcement, so one source feeds both `aire audit` (verify) and any sandbox/permission config (enforce).
+- Closing this milestone's hook layer is what resolves the open layered-enforcement decision.
+
 **Dependencies:** Governance Consolidation.
 
 ---

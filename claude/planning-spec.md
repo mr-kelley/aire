@@ -1,6 +1,6 @@
 ---
 title: Planning Artifacts Specification
-version: 0.1.1
+version: 0.2.0
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, planning]
 status: draft
@@ -140,6 +140,7 @@ Optional. Context, design considerations, open questions.
 - Sprints SHOULD be scoped to approximately one feature or component. If a sprint grows to encompass multiple unrelated features, split it.
 - Every sprint MUST have acceptance criteria that include passing tests. "Tests pass" is always an acceptance criterion, never optional.
 - **One sprint, one branch.** Each sprint maps 1:1 to a git work branch per `claude/claude.git-hygiene.md`. The sprint starts when the work branch is created; the sprint completes when the work is promoted to `main`. No mixing sprints on a branch, no splitting a sprint across branches.
+- **Sprint closeout placement.** A completed sprint's closeout edits (status → `completed`, a `## Completion` section recording the merge commit and promotion record, and the STATE/ROADMAP updates) are **folded into the opening commit of the next sprint** when the next sprint carries content. When no next sprint carries content, the closeout is **bundled as a standalone closeout commit/PR**. This keeps closeout from needing a dedicated promotion when work continues, without ever leaving a sprint un-closed. (Ratified from DEC-000018 after seven consecutive clean applications; sprints 03/05/06/07/08 folded, 04/09 bundled.)
 - Claude MUST update sprint status as work progresses.
 - Claude MUST NOT start a new sprint while the current sprint has uncommitted or unverified work. Complete or explicitly pause the current sprint first.
 - Sprint scope changes (adding/removing deliverables) after work has started are Class B decisions.
@@ -179,5 +180,7 @@ Planning artifacts are compliant if:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-14 (v0.2.0)
+- summary: Ratifies DEC-000018 (PASS after seven clean applications). Added the Sprint closeout placement rule to the Sprints section — fold the closeout into the next sprint's opening commit when it carries content, bundle as a standalone closeout otherwise. Convention promoted from provisional decision to governing rule.
 - time: 2026-06-12
 - summary: Implements DEC-000003. Removed Reinforcement restatement blocks; rules are stated once in their owning sections.
