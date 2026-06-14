@@ -2,8 +2,11 @@
 sprint: 9
 title: CI re-trigger on promotion-tag push — clear a real finding promptly
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #22 (merge commit `2192359`). **Profile A** — the merge touched only `.github/`, `STATE.md`, `sprints/` (no code paths), so `history report` classifies it as a docs/governance merge and no promotion record is required. The push-to-main run came back green (16s); `history report` shows 6 tested promotions, 0 findings, 0 pending. `on.push.tags: ['promote/**']` is now live on `main`: from the next code sprint onward, pushing a `promote/<slug>` record triggers a detection-only `aire-gate` run — the first live observation of DEC-000022. Standalone closeout (no next sprint carries content), bundled with project bookkeeping — same pattern as sprint 04.
 
 ## Goal
 Close the companion gap to sprint 08's tip-grace (explicitly deferred there). Tip-grace removed the *routine* false failure at merge time. What remains: when a **genuine** finding is red (a record was forgotten and a later merge made it real drift), pushing the missing `promote/<slug>` record does not re-run the gate — a `promote/**` tag push matches no trigger — so the cleared green lags to the next push to `main`. This sprint makes the detection re-evaluate when a record lands: a `promote/**` tag push triggers the gate, running **only** findings detection (tests/doctor already ran on the PR and the main push). Recovery + confirmation, not a routine path (DEC-000022).
