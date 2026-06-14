@@ -1,6 +1,6 @@
 ---
 title: Aire CLI Architecture Specification
-version: 0.1.1
+version: 0.1.2
 maintained_by: Aire System Architect (ASA)
 domain_tags: [tooling, cli, architecture]
 status: draft
@@ -54,8 +54,9 @@ tools/
     cli.py             # entry point: argument parsing, subcommand dispatch
     config.py          # .aire/config.toml loading + version-pin check
     doctor.py          # `aire doctor`        (doctor-spec.md)
-    history.py         # `aire history ...`   (history-spec.md; future sprint)
-    # map.py, audit.py, digest.py, hook.py    (future sprints)
+    history.py         # `aire history ...`   (history-spec.md)
+    map.py             # `aire map ...`       (map-spec.md)
+    # audit.py, digest.py, hook.py            (future sprints)
 ```
 
 The console entry point `aire` maps to `aire.cli:console_main`; `python -m aire`
@@ -129,6 +130,8 @@ Tests follow the spec-to-test mapping in `claude/spec-spec.md`. Each subcommand'
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.1.2)
+- summary: Dispatch extended for `aire map` (sprint 05): cli.py routes `map check` / `map report`; config.py gains the `[[coverage]]` binding loader (DEC-000019). Package layout updated — map.py is implemented (map-spec.md); history.py is no longer "future". No change to the invocation contract or constraints.
 - time: 2026-06-13 (v0.1.1)
 - summary: Reconciled with implementation. pyproject.toml lives at tools/ (self-contained package; repo root is not a Python package); added tools/aire/__main__.py for zero-install `python -m aire`; version single-sourced from __init__ via pyproject dynamic; Test Strategy switched from pytest to stdlib unittest (DEC-000016).
 - time: 2026-06-13 (v0.1.0)
