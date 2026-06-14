@@ -6,11 +6,12 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 06 — `aire audit` (governance liveness)** — complete on branch `work/2026-06-14T013400Z/aire-audit-liveness`, PR in flight. Mechanizes the nine DEC-000004 checks (check #1 reuses `map`, #7 reuses `history report`); dogfooded clean of defects on aire (4 candidates from `unknown` decision outcomes, 2 n/a). 86 tests green. Next: `aire digest` (constraints) closes the Aire CLI milestone.
+- **Sprint 07 — `aire digest` (constraints)** — active on branch `work/2026-06-14T095926Z/aire-digest-constraints`. Makes `claude/constraints-digest.md` a derived artifact: owning specs declare digest-bound clauses in a `digest:` header block (declared-not-inferred, like `covers:`); `digest render` re-derives, `digest check` regenerates + diffs fail-closed (DEC-000020). Cures the regenerate-not-patch dead-letter from the governance-drift investigation. Last subcommand — closes the Aire CLI milestone.
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- Aire CLI: `aire audit` — mechanical governance liveness (nine DEC-000004 checks; #1 reuses `map`, #7 reuses `history report`); dogfooded 0 defect on aire (4 candidate, 2 n/a); 86 tests green; promotion record `promote/aire-audit-liveness` — PR #19 — 2026-06-14.
 - Aire CLI: `aire map` — mechanical spec coverage (code engine, AST + `covers:` cross-reference); dogfooded 46/46 units green on aire; role-less binding home `.aire/config.toml` `[[coverage]]` (DEC-000019); 56 tests green; promotion record `promote/aire-map-coverage` — PR #18 — 2026-06-14.
 - **Gate-Enforced Promotion milestone complete**: CI promotion gate (GitHub Actions, required `tests` check + push-to-main findings detection), verified on both halves — PR #15 — 2026-06-13.
 - Aire CLI: `aire history report` — audited history (summary/detail/chain/JSON), findings classification; 38 tests green; second self-written promotion record (`promote/cli-history-report`) — PR #14 — 2026-06-13.
@@ -42,7 +43,7 @@ Decision log: `claude/decisions/events/` (DEC-000001…DEC-000019, private). Loa
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 
 ## Open Questions
-- **DEC-000018 (provisional closeout convention)** under evaluation: does folding sprint closeout into the next sprint's opening commit hold up over a few sprints? First exercise: sprint 03 closeout in this branch's opening commit. Compare reality to intent, then declare a manual PASS/FAIL.
+- **DEC-000018 (provisional closeout convention)** under evaluation: does folding sprint closeout into the next sprint's opening commit hold up over a few sprints? Four data points now: sprint 03 folded, sprint 04 bundled (standalone doc PR), sprint 05 folded, sprint 06 folded (into this sprint-07 opening). Pattern emerging — fold when the next sprint carries content, bundle when a standalone doc change needs its own PR. One or two more, then declare a manual PASS/FAIL.
 - Does this repo get its own AireSmith-generated maintainer role, or continue as operator-paired sessions? (Affects root CLAUDE.md generation; does not block CLI work. See `sprints/aire-cli/01-project-init.md`.)
 - Pilot-role observations — any v0.4.0 structure friction feeds back before bulk migration.
 - First liveness-audit run (manual, per `claude/audit-spec.md`) — schedule after init completes.

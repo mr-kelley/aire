@@ -2,8 +2,11 @@
 sprint: 6
 title: aire audit — mechanical governance liveness
 milestone: Aire CLI
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #19 (merge commit `ac3e141`). Promotion record `promote/aire-audit-liveness` → `ac3e141` written by `aire history record` against the merge commit (86 tests re-verified green there; `aire audit` exits 0 — 0 defect, 0 drift, 4 candidate, 2 n/a; `map check` 53/53 units). `aire history report` now shows 4 tested promotions, 0 findings. Closeout folded into the opening commit of the aire-digest sprint — third exercise of the DEC-000018 provisional convention (sprint 03 folded, sprint 04 bundled, sprint 05 folded).
 
 ## Goal
 Implement `aire audit` — the mechanical half of the governance liveness audit (DEC-000004), the backward verification that what's already written is still true, exercised, and consistent. Mechanizes the nine checks in `claude/audit-spec.md`, reusing `map` (check 1) and `history report` (check 7). Dogfooded on aire: a clean-of-defects run, with not-applicable checks honestly reported for a role-less repo with a private decision log.
