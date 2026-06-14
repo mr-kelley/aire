@@ -6,7 +6,7 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 06 — `aire audit` (governance liveness)** — in progress on branch `work/2026-06-14T013400Z/aire-audit-liveness`. Mechanizing the DEC-000004 liveness audit: the nine mechanical checks (check #1 reuses `map check`, #7 reuses `history report`). Several checks correctly report not-applicable on this role-less repo (no roles → pin currency; no MANUAL.md → inventory; private decision log → degrades on CI). Then `aire digest` closes the Aire CLI milestone.
+- **Sprint 06 — `aire audit` (governance liveness)** — complete on branch `work/2026-06-14T013400Z/aire-audit-liveness`, PR in flight. Mechanizes the nine DEC-000004 checks (check #1 reuses `map`, #7 reuses `history report`); dogfooded clean of defects on aire (4 candidates from `unknown` decision outcomes, 2 n/a). 86 tests green. Next: `aire digest` (constraints) closes the Aire CLI milestone.
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
