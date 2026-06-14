@@ -6,7 +6,7 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Sprint 07 — `aire digest` (constraints)** — active on branch `work/2026-06-14T095926Z/aire-digest-constraints`. Makes `claude/constraints-digest.md` a derived artifact: owning specs declare digest-bound clauses in a `digest:` header block (declared-not-inferred, like `covers:`); `digest render` re-derives, `digest check` regenerates + diffs fail-closed (DEC-000020). Cures the regenerate-not-patch dead-letter from the governance-drift investigation. Last subcommand — closes the Aire CLI milestone.
+- **Sprint 07 — `aire digest` (constraints)** — complete on branch `work/2026-06-14T095926Z/aire-digest-constraints`, PR in flight. Makes `claude/constraints-digest.md` a derived artifact: owning specs declare digest-bound clauses in a `digest:` header block (declared-not-inferred, like `covers:`); `digest render` re-derives, `digest check` regenerates + diffs fail-closed (DEC-000020). Cures the regenerate-not-patch dead-letter from the governance-drift investigation. Dogfooded on aire: digest check 0 (15 clauses), audit 0 defect, map 58/58, doctor 6 ok/1 warn; 104 tests green. **This closes the Aire CLI milestone** (all subcommands shipped; only the optional `hook` shim remains deferred).
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
@@ -35,10 +35,11 @@ Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: P
 - `private/` — personal/legacy working files, never published.
 
 ## Key Decisions
-Decision log: `claude/decisions/events/` (DEC-000001…DEC-000019, private). Load-bearing for current work:
+Decision log: `claude/decisions/events/` (DEC-000001…DEC-000020, private). Load-bearing for current work:
 - DEC-000010: single system-installed CLI; binaries are never orchestrators; no daemons.
 - DEC-000006/000008: coverage contract + version pinning (mechanism live; 27 role migrations pending pilot).
 - DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
+- DEC-000020: the constraints digest is a derived artifact — owning specs declare `digest:` clauses; `aire digest` re-derives and gates fail-closed (declared-not-inferred, like `covers:`).
 - DEC-000013: private role masters versioned in a dedicated repository; pilot-first migration.
 - DEC-000011: pushing human-only; PR creation per explicit case-by-case authorization.
 

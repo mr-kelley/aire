@@ -22,12 +22,12 @@ The mechanism is **declared-not-inferred**, mirroring the coverage contract's `c
 - `tests/tools/aire/test_digest.py` — render determinism, check pass/drift (added/removed/edited clause), dangling-spec fail-closed, read-only, exit codes.
 
 ## Acceptance Criteria
-- [ ] `aire digest render` emits the canonical digest from declared `digest:` clauses; deterministic ordering (spec path ascending, then declaration order); byte-identical across runs.
-- [ ] `aire digest check` regenerates and diffs against `claude/constraints-digest.md`; exit 0 on match, exit 1 on drift (a substantive negative), exit 2 on misconfiguration (unreadable spec, malformed `digest:`).
-- [ ] The committed `claude/constraints-digest.md` equals `aire digest render` (the digest is now genuinely derived, not hand-maintained).
-- [ ] Audit check #3 (digest agreement) still passes; `aire digest check` is the stronger, regenerating successor for the forward direction.
-- [ ] Tests pass on the work branch tip (86 prior + new).
-- [ ] **Dogfood:** `aire digest check` on aire exits 0 — the regeneration matches the committed digest. The dead-letter is now mechanically un-droppable on this repo.
+- [x] `aire digest render` emits the canonical digest from declared `digest:` clauses; deterministic ordering (spec path ascending, then declaration order); byte-identical across runs.
+- [x] `aire digest check` regenerates and diffs against `claude/constraints-digest.md`; exit 0 on match, exit 1 on drift (a substantive negative), exit 2 on misconfiguration (unreadable spec, malformed `digest:`).
+- [x] The committed `claude/constraints-digest.md` equals `aire digest render` (the digest is now genuinely derived, not hand-maintained).
+- [x] Audit check #3 (digest agreement) still passes; `aire digest check` is the stronger, regenerating successor for the forward direction.
+- [x] Tests pass on the work branch tip (104 green: 86 prior + 18 new).
+- [x] **Dogfood:** `aire digest check` on aire exits 0 (15 clauses match) — the dead-letter is now mechanically un-droppable on this repo. With it, `audit` reports 0 defect, `map check` 58/58, `doctor` 6 ok/1 warn.
 - [ ] Promoted to `main` with a tested promotion record (post-merge, Profile B).
 
 ## Honest scoping
