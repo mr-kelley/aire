@@ -6,10 +6,11 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **CI promotion gate sprint** — branch `work/2026-06-13T173940Z/ci-promotion-gate`. Completes Gate-Enforced Promotion: a GitHub Actions gate (tests required on PR = prevention; `aire history report` on push-to-main = findings detection), made a required check via branch protection. Portable to Forgejo Actions for lab repos. Spec-first. Sprint file: `sprints/aire-cli/04-ci-promotion-gate.md`.
+- No active development sprint. **Gate-Enforced Promotion milestone is complete** (CI gate verified on both halves — PR #16 blocked, detection caught a real finding). Finalization PR in flight. Next: continue the Aire CLI milestone (`aire map` / coverage — with the binding-location question — then `aire audit`, `aire digest`), or pivot to the Harness Enforcement Layer (local Claude Code hooks).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- **Gate-Enforced Promotion milestone complete**: CI promotion gate (GitHub Actions, required `tests` check + push-to-main findings detection), verified on both halves — PR #15 — 2026-06-13.
 - Aire CLI: `aire history report` — audited history (summary/detail/chain/JSON), findings classification; 38 tests green; second self-written promotion record (`promote/cli-history-report`) — PR #14 — 2026-06-13.
 - Aire CLI bootstrap: `aire doctor` + `aire history record`, zero-dependency, 30 tests green; first self-written promotion record (`promote/aire-cli-bootstrap`) — PR #12 — 2026-06-13.
 - Project initialization: repo brought under its own governance (STATE/NORTHSTAR/INDEX/sprints) — PR #11 — 2026-06-12.

@@ -2,8 +2,14 @@
 sprint: 4
 title: CI promotion gate — machinery, not discipline
 milestone: Gate-Enforced Promotion
-status: active
+status: completed
 ---
+
+## Completion
+Gate delivered and **verified on both halves with evidence**, not assertion:
+- **Prevention** — PR #16 (a deliberate failing-test PR) was BLOCKED by the required `tests` check (`mergeStateStatus=BLOCKED`, `tests=FAILURE`). A clean PR (#15) passed and merged.
+- **Detection** — on the first push-to-main run, the gate caught a genuine recordless code merge (PR #14's record was unpushed), went red, and cleared to green only once the record was made public (run 27474362337). Caught a real miss, not a staged one.
+The `tests` check is required via ruleset 17327360 (extends DEC-000012). Merged via PR #15; finalization (this doc + milestone closure) via a follow-on PR. Closeout note: bundled with the git-hygiene record-push lesson rather than folded into a future sprint (a DEC-000018 evaluation data point — fold when the next sprint carries content; bundle when a standalone doc change needs a PR anyway).
 
 ## Goal
 Complete Gate-Enforced Promotion: a CI status check that mechanically enforces git-hygiene's promotion conditions, verified by watching it fail a bad PR and pass a clean one. Portable to Forgejo Actions for lab-only repos.

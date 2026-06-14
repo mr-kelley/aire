@@ -16,11 +16,11 @@ Milestones are outcome-bound, not time-bound, per [claude/planning-spec.md](./cl
 ---
 
 ## Milestone: Gate-Enforced Promotion
-**Status:** active
+**Status:** completed
 
 **Outcome:** Promotion to `main` is gated by machinery, not discipline. Each promotion carries a structured record (tests run, outcomes, governing specs, exact SHA), and a generated history report can present a project's full audit trail — every promotion tested, every escalation resolved — in a form digestible by non-technical readers.
 
-**Progress:** Promotion records (`aire history record`) and the history report (`aire history report` — summary/detail/chain/JSON, findings classification) are delivered and demonstrated on this repo. `aire history report` exits nonzero when a code merge lacks a record — the *detection* is complete. The remaining piece is the *enforcing wire*: a merge-gate hook that runs this detection and blocks recordless code promotion — delivered under **Harness Enforcement Layer** (hooks). The milestone completes when that hook lands.
+**Completion evidence:** Records (`aire history record`) and the audited history (`aire history report`) shipped in PRs #12/#14. The CI promotion gate (PR #15, sprint 04) enforces it server-side and was verified on both halves: a deliberate failing-test PR (#16) was *blocked* by the required `tests` check (prevention), and the gate's first push-to-main run *caught a real recordless code merge* and went red until the record was pushed (detection). Two tested promotions, zero findings, "every code merge into main carries a tested promotion record." Portable to Forgejo Actions for lab repos.
 
 **Dependencies:** Governance Consolidation.
 

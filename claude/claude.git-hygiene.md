@@ -1,6 +1,6 @@
 ---
 title: Git Hygiene Strategy (Claude Code, Audit-First)
-version: 0.4.0
+version: 0.4.1
 maintained_by: Aire System Architect (ASA)
 domain_tags: [system, governance, git, hygiene]
 status: draft
@@ -182,6 +182,8 @@ The gate has **two triggers**, because record-existence cannot be checked before
 
 The promotion record itself remains the post-merge step (it annotates the merge commit). Prevention stops untested code; detection catches recordless code at once. Together they satisfy the promotion conditions mechanically.
 
+**Promotion records MUST be pushed to the remote.** The detection job runs on the CI runner, which sees only the *remote* view. A promotion record tag that exists locally but was not pushed is invisible to the gate — so the just-merged code reads as recordless and detection goes red. Consequently, after a code merge, `main`'s detection check sits red in the window between the merge and pushing the record (`git push origin promote/<slug>` — human-only). This is intended: the red is the reminder that the promotion is not complete until its record is public. Push the record to clear it.
+
 **Portability.** The gate is authored as a platform-Actions workflow and depends only on the zero-dependency `aire` CLI (no packages to fetch), so the *same* workflow runs on public GitHub and on a private Forgejo instance with a self-hosted runner — serving both published repos and repos that never leave the lab.
 
 # Tags & Releases (Optional)
@@ -202,6 +204,8 @@ Projects SHOULD adopt guardrails that increase determinism and reduce drift:
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-06-13 (v0.4.1)
+- summary: Added the record-push requirement to the Promotion Gate section — the lesson from the gate's first live run: promotion record tags must be pushed for the CI detection (which sees only the remote) to clear; main's detection sits red between a code merge and pushing its record, by design.
 - time: 2026-06-13 (v0.4.0)
 - summary: Added the Promotion Gate (CI Enforcement) section — promotion conditions enforced server-side via a CI status check (GitHub/Forgejo Actions); two triggers (PR = tests required, push-to-main = findings detection); platform-portable via the zero-dependency CLI. Completes the enforcement half of Gate-Enforced Promotion (sprint 04).
 
