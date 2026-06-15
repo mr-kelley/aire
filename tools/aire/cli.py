@@ -14,6 +14,7 @@ from .digest import run_digest
 from .doctor import run_doctor
 from .history import HistoryError, record as history_record
 from .history_report import run_report as history_report
+from .hook import run_hook
 from .map import run_map
 
 
@@ -44,6 +45,11 @@ def build_parser() -> argparse.ArgumentParser:
     dsub = dig.add_subparsers(dest="digest_command", metavar="<action>")
     dsub.add_parser("render", help="emit the canonical constraints digest")
     dsub.add_parser("check", help="verify the committed digest matches its regeneration (gate)")
+
+    hk = sub.add_parser(
+        "hook", help="PreToolUse enforcement hook (reads a tool-call event on stdin)"
+    )
+    hk.add_argument("--repo", help="repository root (default: event cwd or current dir)")
 
     history = sub.add_parser("history", help="promotion records")
     hsub = history.add_subparsers(dest="history_command", metavar="<action>")
@@ -90,6 +96,8 @@ def main(argv=None) -> int:
             return run_map("report", as_json=args.json)
     if args.command == "audit":
         return run_audit(as_json=args.json)
+    if args.command == "hook":
+        return run_hook(repo=args.repo)
     if args.command == "digest":
         if args.digest_command is None:
             print("usage: aire digest {render|check}", file=sys.stderr)

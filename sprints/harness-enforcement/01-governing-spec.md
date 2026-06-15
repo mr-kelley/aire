@@ -2,8 +2,11 @@
 sprint: 1
 title: Harness Enforcement — governing spec
 milestone: Harness Enforcement Layer
-status: active
+status: completed
 ---
+
+## Completion
+Merged via PR #24 (governing spec `claude/harness-enforcement-spec.md` v0.1.0, merge commit `eda0565`) and PR #25 (Q1 resolution → v0.1.1: policy lives in per-repo `.aire/config.toml [harness]`, DEC-000023). **Profile A** — `claude/`, `ROADMAP`, `STATE`, `sprints/` only, no code paths; no promotion record. Note: #24 was merged before the Q1-resolution commit reached it, so #25 was a clean one-commit follow-up to land v0.1.1 on `main`. Gates green throughout (digest 15, map 58, audit 0 defect, 108 tests). Closeout folded into sprint 2's opening commit per DEC-000018.
 
 ## Goal
 Write the governing spec for the Harness Enforcement Layer milestone, formalizing the layered enforcement model (DEC-000001) as a reviewable spec — spec-first, before any enforcement code. The spec folds in the 2026-06-14 empirical finding that PreToolUse hooks block under bypass mode, which clears the question that previously gated the milestone.

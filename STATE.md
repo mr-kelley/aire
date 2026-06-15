@@ -6,12 +6,13 @@ Aire is an open-source governance framework for human-AI collaborative developme
 Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: PRs to `main`; Profile A for governance docs, Profile B once `tools/` exists.
 
 ## Active Work
-- **Harness Enforcement Layer milestone — active.** Sprint `harness-enforcement/01` (governing spec) in progress: `claude/harness-enforcement-spec.md` v0.1.0 formalizes DEC-000001's layered model (Layer 0–3 ladder + off-box gate), the bypass-mode survivability classification, the policy-as-data convention, and the `aire audit` verification contract. Spec-first — operator reviews the model before any enforcement code. Unblocked by the 2026-06-14 hook-under-bypass test (PreToolUse hooks **do** block under `--dangerously-skip-permissions`; Layer 2 is a real guard). The operator identified this milestone as upstream of Role Lifecycle Management. Implementation sprints to follow: `aire hook` shim, policy data + wiring, audit harness check.
+- **Harness Enforcement Layer milestone — active.** Sprint `harness-enforcement/01` (governing spec, v0.1.2) complete — PRs #24/#25. Sprint `harness-enforcement/02` (**`aire hook` — Layer 2 primitive**) built on branch, PR pending: `tools/aire/hook.py` reads aire's per-repo `.aire/config.toml [harness]` typed policy (push_policy human-only, protected_paths) and blocks fail-closed via exit code (0 allow / 2 block); 31 new tests; wired into aire's `.claude/settings.json` and dogfooded (DEC-000024). Operator collapsed the original sprints 2+3 (engine + wiring + dogfood together); the remaining sprint (3) is the `aire audit` harness check that closes DEC-000001. **Live-activation note:** Claude Code loads project `settings.json` at session start, so the wired hook enforces from the next session, not retroactively.
 - **Aire CLI milestone — complete** (all subcommands shipped: doctor, history, map, audit, digest; PRs #12–#20; the `hook` shim now lands as Harness Enforcement sprint 2).
 - **Gate-Enforced Promotion milestone — complete** (CI gate verified both halves; PRs #15/#17).
 - **Role migration pilot** (external: private roles repository) — first private role migrated to role-base v0.4.0. Status: waiting-on-operator (real-use observation gates the remaining migrations).
 
 ## Recent Completions
+- **Harness Enforcement sprint 1** — governing spec `claude/harness-enforcement-spec.md` (Layer 0–3 ladder + off-box gate, bypass-survivability classification, policy-as-data, `aire audit` contract); Q1 resolved → policy lives per-repo in `.aire/config.toml [harness]` (DEC-000023). Profile A — PRs #24/#25 — 2026-06-14.
 - **Harness enforcement unblocked** — empirical test (2026-06-14) settled the question gating the milestone: a PreToolUse hook exiting 2 **blocks the tool call under `--dangerously-skip-permissions`**, verified with a control + bypass + positive-control run. Refutes the advisory's "hooks are audit-only under YOLO" claim; Layer 2 is a deterministic guard. Recorded in project memory.
 - **Closeout bookkeeping** — DEC-000018 (closeout placement) ratified into `claude/planning-spec.md` v0.2.0 after seven clean applications; DEC-000010 resolved to adopted (CLI milestone realized); advisory design-inputs captured (memory + generic ROADMAP note). Profile A — PR #23 — 2026-06-14.
 - CI: **re-trigger on `promote/**` tag push** — a record push triggers a detection-only `aire-gate` run (tests/doctor skipped on tag runs), so a real forgotten-then-fixed finding clears promptly (DEC-000022). Companion to tip-grace; Profile A, no record — PR #22 — 2026-06-14.
@@ -41,11 +42,12 @@ Repository: `gits/aire` (public mirror: github.com/mr-kelley/aire). Promotion: P
 - `private/` — personal/legacy working files, never published.
 
 ## Key Decisions
-Decision log: `claude/decisions/events/` (DEC-000001…DEC-000023, private). Load-bearing for current work:
+Decision log: `claude/decisions/events/` (DEC-000001…DEC-000024, private). Load-bearing for current work:
 - DEC-000010: single system-installed CLI; binaries are never orchestrators; no daemons.
 - DEC-000006/000008: coverage contract + version pinning (mechanism live; 27 role migrations pending pilot).
 - DEC-000019: role-less repos declare coverage bindings in `.aire/config.toml` `[[coverage]]`; resolution role-headers-first.
 - DEC-000023: harness policy is declared per-repo in `.aire/config.toml` `[harness]` — authoritative and audited (required by DEC-000010 determinism; extends DEC-000019's per-repo `.aire` home); `~/.aire` machine-level cascade deferred. Resolves harness-spec Open Question 1.
+- DEC-000024: `aire hook` decision model — typed `[harness]` constraints (push_policy, protected_paths), exit-code protocol (0 allow / 2 block), fail-closed on guard error. Finding: project `settings.json` hooks activate on next session load, not mid-session.
 - DEC-000020: the constraints digest is a derived artifact — owning specs declare `digest:` clauses; `aire digest` re-derives and gates fail-closed (declared-not-inferred, like `covers:`).
 - DEC-000021: promotion tip-grace — the newest first-parent merge is record-pending by construction (not a finding); older recordless code merges remain findings. Removes the merge-time false failure without suppression.
 - DEC-000022: a `promote/**` tag push re-runs findings detection only (tests/doctor skipped on tag runs); clears a real forgotten-then-fixed finding promptly. Companion to DEC-000021.
