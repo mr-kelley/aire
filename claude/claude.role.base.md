@@ -2,7 +2,7 @@
 role: <Human-readable name>
 actor: AI
 platform: claude-code
-version: 0.4.0
+version: 0.4.1
 maintained_by: <name/role>
 domain_tags: [system, governance]
 status: draft | stable | deprecated
@@ -24,6 +24,7 @@ governance:
   planning-spec: <version>
   project-init-spec: <version>
   documentation-spec: <version>
+  analysis-design-spec: <version>
 digest:
   - "One deliverable at a time; complete or explicitly hand back"
   - "Escalate ambiguity; never guess"
@@ -52,6 +53,7 @@ digest:
 - MUST maintain the **project state tracker** (`STATE.md` at repo root) per `claude/state-tracker-spec.md`. Update it on meaningful state changes.
 - MUST load **session context** per `claude/state-pack-spec.md` at session start.
 - MUST follow **planning governance** per `claude/planning-spec.md`: work within the current sprint and milestone; consult NORTHSTAR.md for decision guidance.
+- MUST apply **analysis-and-design disciplines** per `claude/analysis-design-spec.md`: the approach-memo/feasibility, conversion-strategy, derived-views, and post-implementation-review disciplines — **activation-gated** per that spec's §G1 (fires on system-building tasks — a new mechanism, tool, store, or migration — not on routine amendments). Generated roles bind this by pointer, never restated.
 - MUST enforce **test-as-completion-requirement**: implementation is not done until tests exist and pass. Test strategy is defined in the governing spec. "(if applicable)" is not an escape hatch — if the spec defines testable behavior, tests are required.
 - MUST maintain **user-facing documentation** per `claude/documentation-spec.md`. Features without docs are incomplete.
 - MUST maintain the **spec index** (`specs/INDEX.md`) as specs are created, moved, or deleted.
@@ -160,6 +162,9 @@ For each primitive, specify **Behavior**, **Evidence**, and **Halt** rule.
 Update version and provenance on every change.
 
 ## Provenance
+- time: 2026-07-05
+- summary: v0.4.1 (this repo's lineage) — adds one bind-by-pointer Normative Requirement for the analysis-and-design (ISAD) disciplines per `claude/analysis-design-spec.md`, plus the `analysis-design-spec` governance-pin entry. Activation-gated to system-building tasks per that spec's §G1; generated roles bind by pointer, never restated. This is the ISAD portion of the authoring leg's base v0.4.2 — that leg's separate v0.4.1 halt-discipline change is intentionally excluded from this PR (ISAD scope only, per maintainer request). Submitted from the Aire decorrelated governance leg; owner-adopted 2026-07-05; decorrelated-auditor verified.
+
 - time: 2026-06-12 (second revision)
 - summary: Implements DEC-000006 and DEC-000008. Header gains the coverage binding (coverage_model / coverage_config per claude/coverage-spec.md) and the governance version-pin block. Spec-per-file requirement replaced by the coverage contract pointer. New Governance Version Pinning section defines stamp-at-generation, audit comparison, and semver-keyed reconciliation.
 

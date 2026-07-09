@@ -4,6 +4,7 @@ All specs governing this repository and its deliverables, sorted by path. The go
 
 | Path | Title | Description | Status |
 |---|---|---|---|
+| `claude/analysis-design-spec.md` | Analysis-and-Design Specification | ISAD front-door disciplines: approach-memo/feasibility, conversion-strategy, derived views, post-implementation review | stable |
 | `claude/audit-spec.md` | Governance Liveness Audit Specification | Recurring stale-governance detection: 9 mechanical checks + judgment walk | draft |
 | `claude/claude.git-hygiene.md` | Git Hygiene Strategy | Branching, commits, tested promotion, promotion records | draft |
 | `claude/claude.role.base.md` | Base Role Template | Structure all roles derive from; coverage binding + governance pins | draft |
